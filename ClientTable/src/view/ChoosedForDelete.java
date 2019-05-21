@@ -17,8 +17,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import controller.Client;
 import controller.DeleteController;
+import controller.Client;
 import controller.UniversityController;
 
 public class ChoosedForDelete {
@@ -31,7 +31,7 @@ public class ChoosedForDelete {
 
 	public ChoosedForDelete(WindowUserCom currentWindow) throws IOException {
 		this.currentWindow = currentWindow;
-		this.client = new Client();
+		//this.client = new Client();
 	}
 
 	public void listenerSearchChooser(JMenuItem menu, int index) {

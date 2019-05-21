@@ -37,7 +37,6 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import controller.Client;
 import controller.DeleteController;
 import controller.UniversityController;
 
@@ -49,12 +48,10 @@ public class WindowUserCom {
 	public TableWithPages currentTableWithLecturers;
 	public List<JMenuItem> itemsSearch;
 	public List<JMenuItem> itemsDelete;
-	Client client;
 
 	public WindowUserCom() throws ParserConfigurationException, SAXException, IOException, TransformerException {
 		UniversityController uniContr = new UniversityController();
 		this.uni = uniContr.getUniversity();
-		this.client = new Client();
 		
 		mainFrame = new JFrame();
 		List<JMenu> menusFile = new ArrayList<JMenu>();
@@ -170,27 +167,30 @@ public class WindowUserCom {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// closing resources
+				System.out.println("New File Button begin");
+				/*try {
+					Client client = new Client();
 
-				try {
 					// the following loop performs the exchange of
 					// information between client and client handler
-						System.out.println("New File");
-						/*System.out.println(client.dis.readUTF());
+					while (true) {
+						//Client client = new Client();
+						System.out.println(client.dis.readUTF());
 						String tosend = client.scn.nextLine();
 						client.dos.writeUTF(tosend);
-
-						// If client sends exit,close this connection
-						// and then break from the while loop
 						if (tosend.equals("Exit")) {
 							System.out.println("Closing this connection : " + client.s);
-							client.s.close();
 							System.out.println("Connection closed");
+							break;
 						}
+						// If client sends exit,close this connection
+						// and then break from the while loop
 
-						// printing date or time as requested by client
 						String received = client.dis.readUTF();
-						System.out.println(received);*/
-					
+						System.out.println(received);
+						// printing date or time as requested by client
+
+					}
 
 					// closing resources
 					client.scn.close();
@@ -199,8 +199,8 @@ public class WindowUserCom {
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
-				
-				String fileSeparator = System.getProperty("file.separator");
+				System.out.println("New File Button ended");
+				/*String fileSeparator = System.getProperty("file.separator");
 				JTextField nameOfFile = new JTextField(10);
 
 				JPanel myPanel = new JPanel();
@@ -232,7 +232,7 @@ public class WindowUserCom {
 				 * e2.printStackTrace(); }
 				 */
 
-				JTextField nameField = new JTextField(20);
+				/*JTextField nameField = new JTextField(20);
 				JTextField surnameField = new JTextField(10);
 				JTextField secondNameField = new JTextField(10);
 				JTextField yearField = new JTextField(10);
@@ -288,13 +288,13 @@ public class WindowUserCom {
 					 * e1.printStackTrace(); }
 					 */
 
-				}
+				/*}
 				try {
 					paintGUI();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
 
 			}
 		};
@@ -307,18 +307,7 @@ public class WindowUserCom {
 			public void actionPerformed(ActionEvent e) {
 				// send to server request for array of Uni in string form
 
-				try {
-					// the following loop performs the exchange of
-					// information between client and client handler
-						System.out.println("Open File");
-
-					// closing resources
-					client.scn.close();
-					client.dis.close();
-					client.dos.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+				
 				
 				try {
 					paintGUI();
@@ -334,34 +323,7 @@ public class WindowUserCom {
 	public void listenerAdd(JButton button) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					// the following loop performs the exchange of
-					// information between client and client handler
-						System.out.println("Add lecturer");
-						/*System.out.println(client.dis.readUTF());
-						String tosend = client.scn.nextLine();
-						client.dos.writeUTF(tosend);
-
-						// If client sends exit,close this connection
-						// and then break from the while loop
-						if (tosend.equals("Exit")) {
-							System.out.println("Closing this connection : " + client.s);
-							client.s.close();
-							System.out.println("Connection closed");
-						}
-
-						// printing date or time as requested by client
-						String received = client.dis.readUTF();
-						System.out.println(received);*/
-					
-
-					// closing resources
-					client.scn.close();
-					client.dis.close();
-					client.dos.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+				
 				
 				JTextField nameField = new JTextField(20);
 				JTextField surnameField = new JTextField(10);
@@ -438,18 +400,7 @@ public class WindowUserCom {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				try {
-					// the following loop performs the exchange of
-					// information between client and client handler
-						System.out.println("Add Lecturer");
-
-					// closing resources
-					client.scn.close();
-					client.dis.close();
-					client.dos.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
+				
 				
 				JTextField nameField = new JTextField(20);
 				JTextField surnameField = new JTextField(10);

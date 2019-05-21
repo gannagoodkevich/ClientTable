@@ -11,7 +11,7 @@ public class SearchController {
 	private Client client;
 
 	public SearchController() throws IOException{
-		this.client = new Client();
+		//this.client = new Client();
 	}
 
 	public List<String[]> listenerSearchByFaculty(String faculty, String degreeeName) {

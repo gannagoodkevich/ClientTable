@@ -12,7 +12,7 @@ public class UniversityController {
 	public Client client;
 	
 	public UniversityController() throws IOException{
-		this.client = new Client();
+		//this.client = new Client();
 	}
 	
 	public List<String[]> getUniversity() {

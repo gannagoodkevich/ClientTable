@@ -24,11 +24,12 @@ public class DeleteController {
 	private Client client;
 
 	public DeleteController() throws IOException {
-		this.client = new Client();
+		//this.client = new Client();
 	}
 	
-	public int listenerSearchByFaculty(String faculty, String degreeeName) {
+	public int listenerSearchByFaculty(String faculty, String degreeeName) throws IOException {
 		// here i'll send to server my searching for deletation
+		//System.out.println(client.dis.readUTF());
 		int numberOfDelete = 0;
 		return numberOfDelete;
 	}
