@@ -16,7 +16,7 @@ public class Run {
 	
 	public static void main(String[] args)
 			throws IOException, ParserConfigurationException, SAXException, TransformerException {
-		WindowUserCom main = new WindowUserCom();
+		WindowUserCom main = new WindowUserCom("localhost", 1500);
 		main.run(main, AREA_WIDTH, AREA_HIGHT);
 		}		
 }

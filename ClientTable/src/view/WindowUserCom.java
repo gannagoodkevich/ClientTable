@@ -37,6 +37,8 @@ import javax.xml.transform.TransformerException;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
+import controller.ChatMessage;
+import controller.Client;
 import controller.DeleteController;
 import controller.UniversityController;
 
@@ -48,15 +50,24 @@ public class WindowUserCom {
 	public TableWithPages currentTableWithLecturers;
 	public List<JMenuItem> itemsSearch;
 	public List<JMenuItem> itemsDelete;
+	private int defaultPort;
+	private String defaultHost;
+	private boolean connected;
+	private Client client;
+	List<JMenuItem> itemsFile;
+	JPanel mainPanel;
 
-	public WindowUserCom() throws ParserConfigurationException, SAXException, IOException, TransformerException {
+	public WindowUserCom(String host, int port)
+			throws ParserConfigurationException, SAXException, IOException, TransformerException {
 		UniversityController uniContr = new UniversityController();
-		this.uni = uniContr.getUniversity();
-		
+		// this.uni = uniContr.getUniversity();
+		this.defaultPort = port;
+		this.defaultHost = host;
+
 		mainFrame = new JFrame();
 		List<JMenu> menusFile = new ArrayList<JMenu>();
 		menusFile.add(new JMenu("File"));
-		List<JMenuItem> itemsFile = new ArrayList<JMenuItem>();
+		itemsFile = new ArrayList<JMenuItem>();
 		itemsFile.add(new JMenuItem("Create new"));
 		itemsFile.add(new JMenuItem("Open"));
 		List<JMenu> menusSearch = new ArrayList<JMenu>();
@@ -102,9 +113,12 @@ public class WindowUserCom {
 		}
 		mainFrame.setJMenuBar(menuBar);
 
-		openFile(itemsFile.get(1));
-		createNewFile(itemsFile.get(0));
+		
+		createNewFile(itemsFile.get(0), this);
 		listenerAdd(itemsAdd.get(0));
+
+		System.out.println("END");
+		
 	}
 
 	public static void run(final WindowUserCom frame, final int wigth, final int hight) {
@@ -117,17 +131,22 @@ public class WindowUserCom {
 			}
 		});
 	}
+	
+	public void setUni(List<String[]> list) {
+		this.uni = list;
+	}
 
 	public void paintGUI() throws IOException {
 		JButton addButton = new JButton("Add");
 		JButton searchButton = new JButton("Search");
 		JButton deleteButton = new JButton("Delete");
-		JPanel mainPanel = new JPanel();
+		mainPanel = new JPanel();
 		mainFrame.add(mainPanel, BorderLayout.NORTH);
 		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		// System.out.println(currentUniversity.getFaculty(0).getTitle() +
 		// "paintGuiBefore");
-		currentTableWithLecturers = new TableWithPages(this, uni, mainPanel);
+		
+		
 		// System.out.println(currentUniversity.getFaculty(0).getTitle() +
 		// "paintGuiAfter");
 		// mainPanel.setLayout(null);
@@ -150,6 +169,10 @@ public class WindowUserCom {
 		// deleteButton.setBounds(300, 100, 100, 70);
 		// lableNumberOnPage.setBounds(550, 100, 200, 70);
 		listenerAdd(addButton);
+		openFile(itemsFile.get(1), this);
+		System.out.println("OOPS" + uni.get(0)[0]);
+		currentTableWithLecturers = new TableWithPages(this, uni, mainPanel);
+		//currentTableWithLecturers.updateTable(uni);
 		ChooserForSearch chooser = new ChooserForSearch(this);
 		chooser.listenerSearchChooser(searchButton);
 		chooser.listenerSearchChooser(itemsSearch.get(0), 0);
@@ -163,44 +186,19 @@ public class WindowUserCom {
 		mainFrame.setVisible(true);
 	}
 
-	public void createNewFile(JMenuItem menu) {
+	public void createNewFile(JMenuItem menu, WindowUserCom cg) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// closing resources
 				System.out.println("New File Button begin");
-				/*try {
-					Client client = new Client();
-
-					// the following loop performs the exchange of
-					// information between client and client handler
-					while (true) {
-						//Client client = new Client();
-						System.out.println(client.dis.readUTF());
-						String tosend = client.scn.nextLine();
-						client.dos.writeUTF(tosend);
-						if (tosend.equals("Exit")) {
-							System.out.println("Closing this connection : " + client.s);
-							System.out.println("Connection closed");
-							break;
-						}
-						// If client sends exit,close this connection
-						// and then break from the while loop
-
-						String received = client.dis.readUTF();
-						System.out.println(received);
-						// printing date or time as requested by client
-
-					}
-
-					// closing resources
-					client.scn.close();
-					client.dis.close();
-					client.dos.close();
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-				System.out.println("New File Button ended");
-				/*String fileSeparator = System.getProperty("file.separator");
+				String username = "User";
+				client = new Client(defaultHost, defaultPort, username, cg);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				connected = true;
+				System.out.println("New Fiel");
+				// client.sendMessage(new ChatMessage(ChatMessage.FILE, "Add File"));
+				String fileSeparator = System.getProperty("file.separator");
 				JTextField nameOfFile = new JTextField(10);
 
 				JPanel myPanel = new JPanel();
@@ -212,66 +210,58 @@ public class WindowUserCom {
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
 						"Р’РІРµРґРёС‚Рµ РґР°РЅРЅС‹Рµ РґР»СЏ РїРѕРёСЃРєР° Рё СѓРґР°Р»РµРЅРёСЏ",
 						JOptionPane.OK_CANCEL_OPTION);
-				String relativePath = System.getProperty("user.dir") + fileSeparator + nameOfFile.getText() + ".xml";
-
+				String name = nameOfFile.getText();
 				// server part for creating file
 
-				/*
-				 * File newFile = new File(relativePath); DocumentBuilderFactory
-				 * documentBuilderFactory = DocumentBuilderFactory.newInstance();
-				 * DocumentBuilder documentBuilder; try { documentBuilder =
-				 * documentBuilderFactory.newDocumentBuilder(); Document document =
-				 * documentBuilder.newDocument(); } catch (ParserConfigurationException e3) { //
-				 * TODO Auto-generated catch block e3.printStackTrace(); }
-				 * 
-				 * FileName = nameOfFile.getText() + ".xml";
-				 * 
-				 * try { BufferedWriter bw = new BufferedWriter(new FileWriter(newFile, true));
-				 * bw.write("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>");
-				 * bw.close(); } catch (IOException e2) { // TODO Auto-generated catch block
-				 * e2.printStackTrace(); }
-				 */
-
-				/*JTextField nameField = new JTextField(20);
+				JTextField nameField = new JTextField(20);
 				JTextField surnameField = new JTextField(10);
 				JTextField secondNameField = new JTextField(10);
 				JTextField yearField = new JTextField(10);
 				JTextField faculty = new JTextField(20);
 				JTextField department = new JTextField(10);
-				String[] degreeN = { "РґРѕРєС‚РѕСЂ С„РёР·РёРєРѕ-РјР°С‚РµРјР°С‚РёС‡РµСЃРєРёС… РЅР°СѓРє",
-						"РґРѕРєС‚РѕСЂ С‚РµС…РЅРёС‡РµСЃРєРёС… РЅР°СѓРє",
-						"РґРѕРєС‚РѕСЂ РіСѓРјР°РЅРёС‚Р°СЂРЅС‹С… РЅР°СѓРє",
-						"РєР°РЅРґРёРґР°С‚ С„РёР·РёРєРѕ-РјР°С‚РµРјР°С‚РёС‡РµСЃРєРёС… РЅР°СѓРє",
-						"РєР°РЅРґРёРґР°С‚ С‚РµС…РЅРёС‡РµСЃРєРёС… РЅР°СѓРє",
-						"РєР°РЅРґРёРґР°С‚ РіСѓРјР°РЅРёС‚Р°СЂРЅС‹С… РЅР°СѓРє",
-						"РјР°РіРёСЃС‚СЂ С„РёР·РёРєРѕ-РјР°С‚РµРјР°С‚РёС‡РµСЃРєРёС… РЅР°СѓРє" };
-				String[] degreeT = { "РїСЂРѕС„РµСЃСЃРѕСЂ", "РґРѕС†РµРЅС‚", "РїСЂРµРїРѕРґР°РІР°С‚РµР»СЊ",
-						"СЃС‚Р°СЂС€РёР№ РїСЂРµРїРѕРґР°РІР°С‚РµР»СЊ", "Р°СЃСЃРёСЃС‚РµРЅС‚", "-" };
+				String[] degreeN = { "доктор физико-математических наук", "доктор технических наук",
+						"доктор гуманитарных наук", "кандидат физико-математических наук", "кандидат технических наук",
+						"кандидат гуманитарных наук", "магистр физико-математических наук" };
+				String[] degreeT = { "профессор", "доцент", "преподаватель", "старший преподаватель", "ассистент",
+						"-" };
 				JComboBox<String> comboBoxD = new JComboBox<String>(degreeN);
 				JComboBox<String> comboBoxDn = new JComboBox<String>(degreeT);
 				JPanel myPanel1 = new JPanel();
 				myPanel1.setLayout(new BoxLayout(myPanel1, BoxLayout.Y_AXIS));
-				myPanel1.add(new JLabel("Р¤Р°РјРёР»РёСЏ:"));
+				myPanel1.add(new JLabel("Фамилия:"));
 				myPanel1.add(nameField);
-				myPanel1.add(new JLabel("Р�РјСЏ"));
+				myPanel1.add(new JLabel("Имя"));
 				myPanel1.add(surnameField);
-				myPanel1.add(new JLabel("РћС‚С‡РµСЃС‚РІРѕ:"));
+				myPanel1.add(new JLabel("Отчество:"));
 				myPanel1.add(secondNameField);
-				myPanel1.add(new JLabel("Р¤Р°РєСѓР»СЊС‚РµС‚:"));
+				myPanel1.add(new JLabel("Факультет:"));
 				myPanel1.add(faculty);
-				myPanel1.add(new JLabel("РљР°С„РµРґСЂР°:"));
+				myPanel1.add(new JLabel("Кафедра:"));
 				myPanel1.add(department);
-				myPanel1.add(new JLabel("РЈС‡РµРЅРѕРµ Р·РІР°РЅРёРµ:"));
+				myPanel1.add(new JLabel("Ученое звание:"));
 				myPanel1.add(comboBoxDn);
-				myPanel1.add(new JLabel("РЈС‡РµРЅР°СЏ СЃС‚РµРїРµРЅСЊ:"));
+				myPanel1.add(new JLabel("Ученая степень:"));
 				myPanel1.add(comboBoxD);
-				myPanel1.add(new JLabel("РЎС‚Р°Р¶ СЂР°Р±РѕС‚С‹:"));
+				myPanel1.add(new JLabel("Стаж работы:"));
 				myPanel1.add(yearField);
 
-				int result1 = JOptionPane.showConfirmDialog(null, myPanel1,
-						"Р’РІРµРґРёС‚Рµ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РЅРѕРІРѕРј РїСЂРµРїРѕРґР°РІР°С‚РµР»Рµ",
+				int result1 = JOptionPane.showConfirmDialog(null, myPanel1, "Введите информацию о новом преподавателе",
 						JOptionPane.OK_CANCEL_OPTION);
 				if (result1 == JOptionPane.OK_OPTION) {
+					List<String> lecturer = new ArrayList<String>();
+					lecturer.add(nameField.getText());
+					lecturer.add(surnameField.getText());
+					lecturer.add(secondNameField.getText());
+					lecturer.add(faculty.getText());
+					lecturer.add(department.getText());
+					lecturer.add((String) comboBoxDn.getSelectedItem());
+					lecturer.add((String) comboBoxD.getSelectedItem());
+					lecturer.add(yearField.getText());
+					client.sendMessage(new ChatMessage(ChatMessage.FILE_NEW, name, lecturer));
+
+					uni = new ArrayList<String[]>();
+					uni.add(lecturer.toArray(new String[0]));
+					uni.get(0);
 					// server part of adding new lecturer
 					/*
 					 * currentUniversity = new Uni("New Uni"); Faculty fac = new
@@ -287,34 +277,60 @@ public class WindowUserCom {
 					 * (ParserConfigurationException | TransformerException e1) {
 					 * e1.printStackTrace(); }
 					 */
+					try {
+						paintGUI();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 
-				/*}
-				try {
-					paintGUI();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-
+				}
+				System.out.println("New File Button ended");
 			}
 		};
 		menu.addActionListener(actionListener);
 
 	}
 
-	public void openFile(JMenuItem menu) {
+	public void openFile(JMenuItem menu, WindowUserCom cg) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// send to server request for array of Uni in string form
 
+				System.out.println("Open File Button begin");
+				String username = "User";
+
+				// try creating a new Client with GUI
+				client = new Client(defaultHost, defaultPort, username, cg);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				/*
+				 * tf.setText(""); label.setText("Enter your message below");
+				 */
 				
 				
-				try {
+				JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+				fileChooser.showSaveDialog(null);
+				FileName = fileChooser.getSelectedFile().getAbsolutePath();
+				// Open the save dialog
+				
+				
+				
+				
+				connected = true;
+				System.out.println("Open Fiel");
+				client.sendMessage(new ChatMessage(ChatMessage.FILE_OPEN, FileName));
+				//System.out.println("Trying" + uni.get(0)[0]);
+				/*try {
 					paintGUI();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-				}
+				}*/
+				System.out.println("OOPS" + uni.get(0)[0]);
+				currentTableWithLecturers = new TableWithPages(cg, uni, mainPanel);
+				System.out.println("End of Open file Button proccessing");
 			}
 		};
 		menu.addActionListener(actionListener);
@@ -323,8 +339,7 @@ public class WindowUserCom {
 	public void listenerAdd(JButton button) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+
 				JTextField nameField = new JTextField(20);
 				JTextField surnameField = new JTextField(10);
 				JTextField secondNameField = new JTextField(10);
@@ -399,9 +414,7 @@ public class WindowUserCom {
 	public void listenerAdd(JMenuItem menu) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
+
 				JTextField nameField = new JTextField(20);
 				JTextField surnameField = new JTextField(10);
 				JTextField secondNameField = new JTextField(10);
@@ -470,6 +483,18 @@ public class WindowUserCom {
 			}
 		};
 		menu.addActionListener(actionListener);
+	}
+
+	public void connectionFailed() {
+		/*
+		 * addFileButton.setEnabled(true); newFielButton.setEnabled(false);
+		 * whoIsIn.setEnabled(false); label.setText("Enter your username below");
+		 * tf.setText("Anonymous"); // reset port number and host name as a construction
+		 * time tfPort.setText("" + defaultPort); tfServer.setText(defaultHost); // let
+		 * the user change them tfServer.setEditable(false); tfPort.setEditable(false);
+		 * // don't react to a <CR> after the username tf.removeActionListener(this);
+		 */
+		connected = false;
 	}
 
 }

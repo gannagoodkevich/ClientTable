@@ -59,20 +59,32 @@ public class TableWithPages {
 		this.rowList = rowList;
 		this.t = t;
 		this.currenrPanel = currenrPanel;
-
-		data = rowList.toArray(new String[0][]);
-		// System.out.println(data[1][1]);
-		Vector<String[]> dataCurr = new Vector<String[]>();
-		if (rowList.size() < numOfRows) {
-			numOfRowsEnd = rowList.size();
+		if(rowList == null) {
+			table = new JTable();
 		}
-		for (int i = numOfRowsStart; i < numOfRowsEnd; i++) {
-			dataCurr.add(new String[] { (String) data[i][0], (String) data[i][1], (String) data[i][2],
-					(String) data[i][3], (String) data[i][4], (String) data[i][5] });
-		}
+		else {
+			data = rowList.toArray(new String[0][]);
+			System.out.println("OOPSTable" + rowList.get(0)[0]);
+			// System.out.println(data[1][1]);
+			Vector<String[]> dataCurr = new Vector<String[]>();
+			if (rowList.size() < numOfRows) {
+				numOfRowsEnd = rowList.size();
+			}
+			for (int i = numOfRowsStart; i < numOfRowsEnd; i++) {
+				dataCurr.add(new String[] { (String) data[i][0], (String) data[i][1], (String) data[i][2],
+						(String) data[i][3], (String) data[i][4], (String) data[i][5] });
+			}
 
-		String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
-		table = new JTable(dataCurr1, headers);
+			String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
+			table = new JTable(dataCurr1, headers);
+		}
+		leftButton = new JButton("Go to privious");
+		rightButton = new JButton("Go to next");
+		firstButton = new JButton("Go to head");
+		lastButton = new JButton("Go to tail");
+		changeRowsButton = new JButton("Change rows");
+		
+		
 		scroll = new JScrollPane(table);
 		table.setPreferredScrollableViewportSize(new Dimension(400, 500));
 		table.setRowHeight(50);
@@ -121,7 +133,7 @@ public class TableWithPages {
 		listenerChangeNum(changeRowsButton);
 	}
 
-	public void updateTable(List<String[]> university) {
+	public void updateTable(List<String[]> university, JPanel main) {
 	
 		data = university.toArray(new String[0][]);
 		List<String[]> dataCurr = new ArrayList<String[]>();
@@ -132,8 +144,6 @@ public class TableWithPages {
 		String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
 
 		table = new JTable(dataCurr1, headers);
-		table.repaint();
-		table.setRowHeight(50);
 		scroll.setViewportView(table);
 	}
 
