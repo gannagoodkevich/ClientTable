@@ -11,12 +11,15 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import controller.ChatMessage;
+import controller.Client;
 import controller.UniversityController;
 
 public class TableWithPages {
@@ -29,6 +32,8 @@ public class TableWithPages {
 
 	JTable table;
 	public JScrollPane scroll;
+	private Client client;
+	private boolean connected;
 
 	JPanel pane;
 
@@ -59,6 +64,7 @@ public class TableWithPages {
 		this.rowList = rowList;
 		this.t = t;
 		this.currenrPanel = currenrPanel;
+		pane = new JPanel();
 		if(rowList == null) {
 			table = new JTable();
 		}
@@ -77,6 +83,24 @@ public class TableWithPages {
 
 			String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
 			table = new JTable(dataCurr1, headers);
+			
+			if (rowList.size() >= numOfRows) {
+				lableNumberOfElements = new JLabel(
+						"Number of elementson page: " + numOfRows + " from total " + rowList.size());
+			} else {
+				lableNumberOfElements = new JLabel(
+						"Number of elementson page: " + rowList.size() + " from total " + rowList.size());
+			}
+			pane.add(lableNumberOfElements);
+			// lableNumberOfElements.setBounds(750, 100, 200, 70);
+			if (rowList.size() % numOfRows != 0) {
+				lableNumberOnPage = new JLabel(
+						" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
+			} else {
+				lableNumberOnPage = new JLabel(" Number of page: " + currPage + "from " + (rowList.size() / numOfRows));
+			}
+			pane.add(lableNumberOnPage);
+			
 		}
 		leftButton = new JButton("Go to privious");
 		rightButton = new JButton("Go to next");
@@ -90,7 +114,6 @@ public class TableWithPages {
 		table.setRowHeight(50);
 		currenrPanel.setLayout(new BoxLayout(currenrPanel, BoxLayout.Y_AXIS));
 		currenrPanel.add(scroll);
-		pane = new JPanel();
 		currenrPanel.add(pane);
 		pane.setLayout(new BoxLayout(pane, BoxLayout.X_AXIS));
 		pane.add(leftButton);
@@ -108,22 +131,7 @@ public class TableWithPages {
 		pane.add(changeRowsButton);
 		pane.add(Box.createRigidArea(new Dimension(10, 0)));
 		// changeRowsButton.setBounds(1200, 100, 150, 70);
-		if (rowList.size() >= numOfRows) {
-			lableNumberOfElements = new JLabel(
-					"Number of elementson page: " + numOfRows + " from total " + rowList.size());
-		} else {
-			lableNumberOfElements = new JLabel(
-					"Number of elementson page: " + rowList.size() + " from total " + rowList.size());
-		}
-		pane.add(lableNumberOfElements);
-		// lableNumberOfElements.setBounds(750, 100, 200, 70);
-		if (rowList.size() % numOfRows != 0) {
-			lableNumberOnPage = new JLabel(
-					" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-		} else {
-			lableNumberOnPage = new JLabel(" Number of page: " + currPage + "from " + (rowList.size() / numOfRows));
-		}
-		pane.add(lableNumberOnPage);
+		
 		// System.out.println(data[1][1]+ "problem");
 
 		listenerTurnLeft(rightButton, rowList);
@@ -145,6 +153,17 @@ public class TableWithPages {
 
 		table = new JTable(dataCurr1, headers);
 		scroll.setViewportView(table);
+	}
+	
+	public void delete() {
+		leftButton.setVisible(false);
+		rightButton.setVisible(false);
+		firstButton.setVisible(false);
+		lastButton.setVisible(false);
+		changeRowsButton.setVisible(false);
+		scroll.setVisible(false);
+		lableNumberOfElements.setVisible(false);
+		lableNumberOnPage.setVisible(false);
 	}
 
 	public void listenerTurnLeft(JButton button, List<String[]> rowList) {
@@ -371,5 +390,49 @@ public class TableWithPages {
 		};
 		button.addActionListener(actionListener);
 	}
+	
+	public void listenerlect(JButton button) {
+		ActionListener actionListener = new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Open File Button begin");
+				String username = "User";
+
+				// try creating a new Client with GUI
+				client = new Client("localhost", 1500, username, t);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				/*
+				 * tf.setText(""); label.setText("Enter your message below");
+				 */
+				
+				
+				JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+				fileChooser.showSaveDialog(null);
+				String FileName = fileChooser.getSelectedFile().getAbsolutePath();
+				// Open the save dialog
+				
+				
+				
+				
+				connected = true;
+				System.out.println("Open Fiel");
+				client.sendMessage(new ChatMessage(ChatMessage.FILE_OPEN, FileName));
+				//System.out.println("Trying" + uni.get(0)[0]);
+				/*try {
+					paintGUI();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}*/
+				//System.out.println("OOPS" + uni.get(0)[0]);
+				//currentTableWithLecturers = new TableWithPages(cg, uni, mainPanel);
+				//System.out.println("End of Open file Button proccessing");
+			}
+		};
+		button.addActionListener(actionListener);
+	}
+	
+	
 
 }

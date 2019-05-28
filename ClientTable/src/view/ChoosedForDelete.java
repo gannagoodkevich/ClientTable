@@ -31,7 +31,6 @@ public class ChoosedForDelete {
 
 	public ChoosedForDelete(WindowUserCom currentWindow) throws IOException {
 		this.currentWindow = currentWindow;
-		//this.client = new Client();
 	}
 
 	public void listenerSearchChooser(JMenuItem menu, int index) {
@@ -43,7 +42,6 @@ public class ChoosedForDelete {
 					try {
 						listenerSearchByFaculty();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -51,7 +49,6 @@ public class ChoosedForDelete {
 					try {
 						listenerSearchByName();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -59,7 +56,6 @@ public class ChoosedForDelete {
 					try {
 						listenerSearchByYear();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -76,16 +72,14 @@ public class ChoosedForDelete {
 			public void actionPerformed(ActionEvent e) {
 				JPanel myPanel = new JPanel();
 				myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
-				//System.out.println(currentWindow.currentUniversity.getFaculty(0).getTitle());
 				Object[] options = { "Faculty && DegreeName", "Name && Department", "Year" };
 				int result = JOptionPane.showOptionDialog(null, myPanel, "Введите данные о новом преподавателе",
 						JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
-				
+
 				if (result == 0) {
 					try {
 						listenerSearchByFaculty();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -93,7 +87,6 @@ public class ChoosedForDelete {
 					try {
 						listenerSearchByName();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -101,7 +94,6 @@ public class ChoosedForDelete {
 					try {
 						listenerSearchByYear();
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 				}
@@ -112,25 +104,21 @@ public class ChoosedForDelete {
 	}
 
 	public void listenerSearchByFaculty() throws IOException {
-		//get faculties and degreeT from uni in String 
 		UniversityController uniController = new UniversityController();
 		String[] faculties = uniController.getFaculties().toArray(new String[0]);
 		String[] degreeT = uniController.getDegrees().toArray(new String[0]);
 		JComboBox<String> comboBoxF = new JComboBox<String>(faculties);
 		JComboBox<String> comboBoxDn = new JComboBox<String>(degreeT);
-
 		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
-
 		myPanel.add(new JLabel("Факультет:"));
 		myPanel.add(comboBoxF);
-
 		myPanel.add(new JLabel("Ученое звание:"));
 		myPanel.add(comboBoxDn);
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "Выберите способ поиска",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			DeleteController deletecontr = new DeleteController();
+			DeleteController deletecontr = new DeleteController(currentWindow);
 			int numberOfDelete = deletecontr.listenerSearchByFaculty((String) comboBoxF.getSelectedItem(),
 					(String) comboBoxDn.getSelectedItem());
 			JPanel pan = new JPanel();
@@ -161,20 +149,13 @@ public class ChoosedForDelete {
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "Введите данные для поиска",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			DeleteController deletecontr = new DeleteController();
+			DeleteController deletecontr = new DeleteController(currentWindow);
 			int numberOfDelete = deletecontr.listenerSearchByName((String) comboBoxD.getSelectedItem(),
 					nameField.getText());
 			JPanel pan = new JPanel();
 			pan.add(new JLabel(" " + numberOfDelete));
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
 			JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
-			/*try {
-				DOMExample dom = new DOMExample(uni, currentWindow.FileName);
-				currentWindow.currentTableWithLecturers.updateTable(uni);
-			} catch (ParserConfigurationException | TransformerException e1) {
-				e1.printStackTrace();
-			}*/
-
 		}
 
 	}
@@ -195,24 +176,22 @@ public class ChoosedForDelete {
 				JOptionPane.OK_CANCEL_OPTION);
 		String year1 = yearFieldFrom.getText();
 		String year2 = yearFieldTo.getText();
-		DeleteController deletecontr = new DeleteController();
+		DeleteController deletecontr = new DeleteController(currentWindow);
 		int numberOfDelete = deletecontr.listenerSearchByYear(year1, year2);
 		JPanel pan = new JPanel();
 		pan.add(new JLabel(" " + numberOfDelete));
 		UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
 		JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
-		
+
 	}
 
-	/*public void updateTable(Uni uni) {
-		UniversityController uniContr = new UniversityController();
-		List<String[]> rowList = uniContr.getUniversity(uni);
-		String[][] data = rowList.toArray(new String[0][]);
-		table = new JTable(data, headers);
-		table.repaint();
-		table.setPreferredScrollableViewportSize(new Dimension(400, 500));
-		table.setRowHeight(50);
-		scroll.setViewportView(table);
-	}*/
+	/*
+	 * public void updateTable(Uni uni) { UniversityController uniContr = new
+	 * UniversityController(); List<String[]> rowList = uniContr.getUniversity(uni);
+	 * String[][] data = rowList.toArray(new String[0][]); table = new JTable(data,
+	 * headers); table.repaint(); table.setPreferredScrollableViewportSize(new
+	 * Dimension(400, 500)); table.setRowHeight(50); scroll.setViewportView(table);
+	 * }
+	 */
 
 }

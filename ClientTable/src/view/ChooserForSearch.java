@@ -21,6 +21,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
+import controller.ChatMessage;
+import controller.Client;
 import controller.DeleteController;
 import controller.SearchController;
 import controller.UniversityController;
@@ -32,6 +34,8 @@ public class ChooserForSearch {
 	JScrollPane scroll;
 	JTable table;
 	WindowUserCom t;
+	Client client;
+	private boolean connected;
 
 	ChooserForSearch(WindowUserCom t) {
 		this.t = t;
@@ -112,13 +116,24 @@ public class ChooserForSearch {
 	}
 
 	public void listenerSearchByFaculty() throws IOException {
+		
+		System.out.println("Fac search Button begin");
+		String username = "User";
+		client = new Client("localhost", 1500, username, t);
+		// test if we can start the Client
+		if (!client.start())
+			return;
+		
+		connected = true;
+		client.sendMessage(new ChatMessage(ChatMessage.SEARCH_FAC, " hoping"));
+		
 		UniversityController uniController = new UniversityController();
 		String[] faculties = uniController.getFaculties().toArray(new String[0]);
 		String[] degreeT = uniController.getDegrees().toArray(new String[0]);
 		JComboBox<String> comboBoxF = new JComboBox<String>(faculties);
 		JComboBox<String> comboBoxDn = new JComboBox<String>(degreeT);
 
-		JPanel myPanel = new JPanel();
+		/*JPanel myPanel = new JPanel();
 		myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
 
 		myPanel.add(new JLabel("Факультет:"));
@@ -142,19 +157,29 @@ public class ChooserForSearch {
 			 * table1.setRowHeight(50);
 			 */
 			// pan.setLayout(null);
-			TableWithPages currTable = new TableWithPages(t, rowList, pan);
+			/*TableWithPages currTable = new TableWithPages(t, rowList, pan);
 			// pan.add(currTable.scroll);
 
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
 
 			JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
 
-		}
+		}*/
 
 	}
 
 	public void listenerSearchByName() throws IOException {
 
+		System.out.println("Name search Button begin");
+		String username = "User";
+		client = new Client("localhost", 1500, username, t);
+		// test if we can start the Client
+		if (!client.start())
+			return;
+		
+		connected = true;
+		client.sendMessage(new ChatMessage(ChatMessage.SEARCH_NAME, " hoping"));
+		
 		JTextField nameField = new JTextField();
 
 		UniversityController uniContr = new UniversityController();
@@ -194,6 +219,17 @@ public class ChooserForSearch {
 
 	public void listenerSearchByYear() throws IOException {
 
+		System.out.println("Name search Button begin");
+		String username = "User";
+		client = new Client("localhost", 1500, username, t);
+		// test if we can start the Client
+		if (!client.start())
+			return;
+		
+		connected = true;
+		client.sendMessage(new ChatMessage(ChatMessage.SEARCH_YEAR, " hoping"));
+	
+		
 		JTextField yearFieldFrom = new JTextField(10);
 		JTextField yearFieldTo = new JTextField(10);
 

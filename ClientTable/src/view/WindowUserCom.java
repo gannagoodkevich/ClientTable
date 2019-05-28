@@ -55,7 +55,12 @@ public class WindowUserCom {
 	private boolean connected;
 	private Client client;
 	List<JMenuItem> itemsFile;
-	JPanel mainPanel;
+	public JPanel mainPanel;
+	
+	JButton addButton;
+	JButton searchButton;
+	JButton deleteButton; 
+	
 
 	public WindowUserCom(String host, int port)
 			throws ParserConfigurationException, SAXException, IOException, TransformerException {
@@ -63,8 +68,28 @@ public class WindowUserCom {
 		// this.uni = uniContr.getUniversity();
 		this.defaultPort = port;
 		this.defaultHost = host;
-
+		mainPanel = new JPanel();
 		mainFrame = new JFrame();
+		mainFrame.add(mainPanel, BorderLayout.NORTH);
+		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+		
+		addButton = new JButton("Add");
+		searchButton = new JButton("Search");
+		deleteButton = new JButton("Delete");
+		
+		JPanel sPane = new JPanel();
+		mainPanel.add(sPane);
+		sPane.setLayout(new BoxLayout(sPane, BoxLayout.X_AXIS));
+		sPane.add(Box.createRigidArea(new Dimension(0, 50)));
+		sPane.add(addButton);
+		sPane.add(Box.createRigidArea(new Dimension(10, 0)));
+		// addButton.setBounds(0, 100, 100, 70);
+		sPane.add(searchButton);
+		sPane.add(Box.createRigidArea(new Dimension(10, 0)));
+		// searchButton.setBounds(150, 100, 100, 70);
+		sPane.add(deleteButton);
+		sPane.add(Box.createRigidArea(new Dimension(10, 0)));
+		
 		List<JMenu> menusFile = new ArrayList<JMenu>();
 		menusFile.add(new JMenu("File"));
 		itemsFile = new ArrayList<JMenuItem>();
@@ -113,12 +138,23 @@ public class WindowUserCom {
 		}
 		mainFrame.setJMenuBar(menuBar);
 
-		
 		createNewFile(itemsFile.get(0), this);
 		listenerAdd(itemsAdd.get(0));
+		openFile(itemsFile.get(1), this);
 
-		System.out.println("END");
+		ChooserForSearch chooser = new ChooserForSearch(this);
+		chooser.listenerSearchChooser(searchButton);
+		chooser.listenerSearchChooser(itemsSearch.get(0), 0);
+		chooser.listenerSearchChooser(itemsSearch.get(1), 1);
+		chooser.listenerSearchChooser(itemsSearch.get(2), 2);
+		ChoosedForDelete delete = new ChoosedForDelete(this);
+		delete.listenerSearchChooser(deleteButton);
+		delete.listenerSearchChooser(itemsDelete.get(0), 0);
+		delete.listenerSearchChooser(itemsDelete.get(1), 1);
+		delete.listenerSearchChooser(itemsDelete.get(2), 2);
 		
+		System.out.println("END");
+
 	}
 
 	public static void run(final WindowUserCom frame, final int wigth, final int hight) {
@@ -131,22 +167,11 @@ public class WindowUserCom {
 			}
 		});
 	}
-	
-	public void setUni(List<String[]> list) {
-		this.uni = list;
-	}
 
 	public void paintGUI() throws IOException {
-		JButton addButton = new JButton("Add");
-		JButton searchButton = new JButton("Search");
-		JButton deleteButton = new JButton("Delete");
-		mainPanel = new JPanel();
-		mainFrame.add(mainPanel, BorderLayout.NORTH);
-		mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
 		// System.out.println(currentUniversity.getFaculty(0).getTitle() +
 		// "paintGuiBefore");
-		
-		
+
 		// System.out.println(currentUniversity.getFaculty(0).getTitle() +
 		// "paintGuiAfter");
 		// mainPanel.setLayout(null);
@@ -154,35 +179,16 @@ public class WindowUserCom {
 		// BorderLayout.BEFORE_FIRST_LINE);
 		// mainPanel.setBounds(50, 550, 1800, 500);
 		// mainPanel.setLayout(null);
-		JPanel sPane = new JPanel();
-		mainPanel.add(sPane);
-		sPane.setLayout(new BoxLayout(sPane, BoxLayout.X_AXIS));
-		sPane.add(Box.createRigidArea(new Dimension(0, 50)));
-		sPane.add(addButton);
-		sPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		// addButton.setBounds(0, 100, 100, 70);
-		sPane.add(searchButton);
-		sPane.add(Box.createRigidArea(new Dimension(10, 0)));
-		// searchButton.setBounds(150, 100, 100, 70);
-		sPane.add(deleteButton);
-		sPane.add(Box.createRigidArea(new Dimension(10, 0)));
+		
 		// deleteButton.setBounds(300, 100, 100, 70);
 		// lableNumberOnPage.setBounds(550, 100, 200, 70);
 		listenerAdd(addButton);
-		openFile(itemsFile.get(1), this);
-		System.out.println("OOPS" + uni.get(0)[0]);
+		if(currentTableWithLecturers!=null) {
+			currentTableWithLecturers.delete();
+		}
 		currentTableWithLecturers = new TableWithPages(this, uni, mainPanel);
-		//currentTableWithLecturers.updateTable(uni);
-		ChooserForSearch chooser = new ChooserForSearch(this);
-		chooser.listenerSearchChooser(searchButton);
-		chooser.listenerSearchChooser(itemsSearch.get(0), 0);
-		chooser.listenerSearchChooser(itemsSearch.get(1), 1);
-		chooser.listenerSearchChooser(itemsSearch.get(2), 2);
-		ChoosedForDelete delete = new ChoosedForDelete(this);
-		delete.listenerSearchChooser(deleteButton);
-		delete.listenerSearchChooser(itemsDelete.get(0), 0);
-		delete.listenerSearchChooser(itemsDelete.get(1), 1);
-		delete.listenerSearchChooser(itemsDelete.get(2), 2);
+		// currentTableWithLecturers.updateTable(uni);
+		
 		mainFrame.setVisible(true);
 	}
 
@@ -195,6 +201,7 @@ public class WindowUserCom {
 				// test if we can start the Client
 				if (!client.start())
 					return;
+				
 				connected = true;
 				System.out.println("New Fiel");
 				// client.sendMessage(new ChatMessage(ChatMessage.FILE, "Add File"));
@@ -277,6 +284,7 @@ public class WindowUserCom {
 					 * (ParserConfigurationException | TransformerException e1) {
 					 * e1.printStackTrace(); }
 					 */
+					
 					try {
 						paintGUI();
 					} catch (IOException e1) {
@@ -290,6 +298,13 @@ public class WindowUserCom {
 		};
 		menu.addActionListener(actionListener);
 
+	}
+
+	public void drawTable(JPanel currPane,List<String[]> uni) {
+		if (currentTableWithLecturers != null) {
+			currentTableWithLecturers.delete();
+		}
+		currentTableWithLecturers = new TableWithPages(this, uni, currPane);
 	}
 
 	public void openFile(JMenuItem menu, WindowUserCom cg) {
@@ -308,28 +323,24 @@ public class WindowUserCom {
 				/*
 				 * tf.setText(""); label.setText("Enter your message below");
 				 */
-				
-				
+
 				JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
 				fileChooser.showSaveDialog(null);
 				FileName = fileChooser.getSelectedFile().getAbsolutePath();
 				// Open the save dialog
-				
-				
-				
-				
+
 				connected = true;
 				System.out.println("Open Fiel");
 				client.sendMessage(new ChatMessage(ChatMessage.FILE_OPEN, FileName));
-				//System.out.println("Trying" + uni.get(0)[0]);
-				/*try {
-					paintGUI();
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}*/
-				System.out.println("OOPS" + uni.get(0)[0]);
-				currentTableWithLecturers = new TableWithPages(cg, uni, mainPanel);
+				// System.out.println("Trying" + uni.get(0)[0]);
+				/*
+				 * try { paintGUI(); } catch (IOException e1) { // TODO Auto-generated catch
+				 * block e1.printStackTrace(); }
+				 */
+
+				System.out.println("OOPS" + FileName);
+
+				// currentTableWithLecturers = new TableWithPages(cg, uni, mainPanel);
 				System.out.println("End of Open file Button proccessing");
 			}
 		};
@@ -384,6 +395,22 @@ public class WindowUserCom {
 						"Р’РІРµРґРёС‚Рµ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РЅРѕРІРѕРј РїСЂРµРїРѕРґР°РІР°С‚РµР»Рµ",
 						JOptionPane.OK_CANCEL_OPTION);
 				if (result == JOptionPane.OK_OPTION) {
+					System.out.println("Write new lecturer");
+					List<String> lecturer = new ArrayList<String>();
+					lecturer.add(nameField.getText());
+					lecturer.add(surnameField.getText());
+					lecturer.add(secondNameField.getText());
+					lecturer.add((String) comboBoxFacultes.getSelectedItem());
+					lecturer.add((String) comboBoxDepartments.getSelectedItem());
+					lecturer.add((String) comboBoxDegreeScience.getSelectedItem());
+					lecturer.add((String) comboBoxdegreeTitle.getSelectedItem());
+					lecturer.add(yearField.getText());
+					//uni = new ArrayList<String[]>();
+					uni.add(lecturer.toArray(new String[0]));
+					System.out.println(uni.size());
+					//uni.get(0);
+					client.sendMessage(new ChatMessage(ChatMessage.ADD_LECT, uni));
+					System.out.println("End of putting");
 					/*
 					 * if (currentUniversity.getFacultyByName((String)
 					 * comboBoxFacultes.getSelectedItem()) .getDepartmentByName((String)

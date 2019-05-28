@@ -177,8 +177,9 @@ public class Client  {
 					else {
 						//cg.append(msg);
 						System.out.println("Server answered");
-						cg.setUni(msg);
-						System.out.println(msg.get(0)[3]);
+						//Client.cg.setUni(msg);
+						cg.drawTable(cg.mainPanel, msg);
+						System.out.println(msg.get(0)[4]);
 					}
 				}
 				catch(IOException e) {
