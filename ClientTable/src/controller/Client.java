@@ -3,6 +3,8 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 
+import javax.swing.SwingUtilities;
+
 import view.WindowUserCom;
 
 /*
@@ -179,7 +181,11 @@ public class Client  {
 						System.out.println("Server answered");
 						//Client.cg.setUni(msg);
 						cg.drawTable(cg.mainPanel, msg);
-						System.out.println(msg.get(0)[4]);
+						cg.mainFrame.invalidate();
+						cg.mainFrame.validate();
+						cg.mainFrame.repaint();
+						//SwingUtilities.updateComponentTreeUI(cg.mainFrame);
+						//System.out.println(msg.get(0)[4]);
 					}
 				}
 				catch(IOException e) {

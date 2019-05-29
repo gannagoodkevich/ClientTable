@@ -50,8 +50,8 @@ public class WindowUserCom {
 	public TableWithPages currentTableWithLecturers;
 	public List<JMenuItem> itemsSearch;
 	public List<JMenuItem> itemsDelete;
-	private int defaultPort;
-	private String defaultHost;
+	public int defaultPort;
+	String defaultHost;
 	private boolean connected;
 	private Client client;
 	List<JMenuItem> itemsFile;
@@ -168,30 +168,6 @@ public class WindowUserCom {
 		});
 	}
 
-	public void paintGUI() throws IOException {
-		// System.out.println(currentUniversity.getFaculty(0).getTitle() +
-		// "paintGuiBefore");
-
-		// System.out.println(currentUniversity.getFaculty(0).getTitle() +
-		// "paintGuiAfter");
-		// mainPanel.setLayout(null);
-		// mainFrame.add(currentTableWithLecturers.scroll,
-		// BorderLayout.BEFORE_FIRST_LINE);
-		// mainPanel.setBounds(50, 550, 1800, 500);
-		// mainPanel.setLayout(null);
-		
-		// deleteButton.setBounds(300, 100, 100, 70);
-		// lableNumberOnPage.setBounds(550, 100, 200, 70);
-		listenerAdd(addButton);
-		if(currentTableWithLecturers!=null) {
-			currentTableWithLecturers.delete();
-		}
-		currentTableWithLecturers = new TableWithPages(this, uni, mainPanel);
-		// currentTableWithLecturers.updateTable(uni);
-		
-		mainFrame.setVisible(true);
-	}
-
 	public void createNewFile(JMenuItem menu, WindowUserCom cg) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -285,12 +261,14 @@ public class WindowUserCom {
 					 * e1.printStackTrace(); }
 					 */
 					
-					try {
-						paintGUI();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+					listenerAdd(addButton, cg);
+					if(currentTableWithLecturers!=null) {
+						currentTableWithLecturers.delete();
 					}
+					currentTableWithLecturers = new TableWithPages(cg, uni, mainPanel);
+					// currentTableWithLecturers.updateTable(uni);
+					
+					mainFrame.setVisible(true);
 
 				}
 				System.out.println("New File Button ended");
@@ -347,10 +325,26 @@ public class WindowUserCom {
 		menu.addActionListener(actionListener);
 	}
 
-	public void listenerAdd(JButton button) {
+	public void listenerAdd(JButton button, WindowUserCom cg) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
+				System.out.println("Open File Button begin");
+				String username = "User";
+
+				// try creating a new Client with GUI
+				client = new Client(defaultHost, defaultPort, username, cg);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				/*
+				 * tf.setText(""); label.setText("Enter your message below");
+				 */
+
+				
+
+				connected = true;
+				
 				JTextField nameField = new JTextField(20);
 				JTextField surnameField = new JTextField(10);
 				JTextField secondNameField = new JTextField(10);
@@ -407,7 +401,10 @@ public class WindowUserCom {
 					lecturer.add(yearField.getText());
 					//uni = new ArrayList<String[]>();
 					uni.add(lecturer.toArray(new String[0]));
-					System.out.println(uni.size());
+					
+					for(int i=0; i<uni.size(); i++) {
+						System.out.println("trym" + uni.get(i)[0]);
+					}
 					//uni.get(0);
 					client.sendMessage(new ChatMessage(ChatMessage.ADD_LECT, uni));
 					System.out.println("End of putting");

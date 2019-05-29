@@ -132,6 +132,8 @@ public class TableWithPages {
 		pane.add(Box.createRigidArea(new Dimension(10, 0)));
 		// changeRowsButton.setBounds(1200, 100, 150, 70);
 		
+		currenrPanel.repaint();
+		
 		// System.out.println(data[1][1]+ "problem");
 
 		listenerTurnLeft(rightButton, rowList);
@@ -169,58 +171,24 @@ public class TableWithPages {
 	public void listenerTurnLeft(JButton button, List<String[]> rowList) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				System.out.println("New File Button begin");
+				String username = "User";
+				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				
+				connected = true;
+				client.sendMessage(new ChatMessage(ChatMessage.TURN_LEFT, numOfRows));
+				
 				System.out.println("Pressed");
-				data = rowList.toArray(new String[0][]);
-				/// lost data
-				// System.out.println(data[1][1]);
-				//System.out.println(t.currentUniversity.getFaculty(0).getTitle());
-				if (rowList.size() <= numOfRows) {
-					numOfRowsEnd = rowList.size();
-					numOfRowsStart = 0;
-					lableNumberOfElements
-							.setText("Number of elementson page: " + rowList.size() + " from total " + rowList.size());
-					lableNumberOnPage.setText(" Number of page: " + 1 + " from " + (rowList.size() / numOfRows + 1));
-				} else {
-					if (numOfRowsEnd != rowList.size()) {
-						if (numOfRowsEnd <= rowList.size() - numOfRows) {
-							numOfRowsEnd += numOfRows;
-							numOfRowsStart += numOfRows;
-							currPage += 1;
-							lableNumberOnPage.setText(
-									" Number of page: " + (currPage) + " from " + (rowList.size() / numOfRows + 1));
-							lableNumberOfElements.setText(
-									"Number of elementson page: " + numOfRows + " from total " + rowList.size());
-						} else {
-							numOfRowsStart = numOfRowsEnd;
-							numOfRowsEnd = rowList.size();
-							currPage += 1;
-							lableNumberOnPage.setText(" Number of page: " + (rowList.size() / numOfRows + 1) + " from "
-									+ (rowList.size() / numOfRows + 1));
-							lableNumberOfElements.setText("Number of elementson page: " + rowList.size() % numOfRows
-									+ " from total " + rowList.size());
-						}
-					} else {
-						numOfRowsEnd = numOfRows;
-						numOfRowsStart = 0;
-						currPage = 1;
-						lableNumberOnPage
-								.setText(" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-						lableNumberOfElements
-								.setText("Number of elementson page: " + numOfRows + " from total " + rowList.size());
-					}
-				}
-				// data = rowList.toArray(new String[0][]);
-				List<String[]> dataCurr = new ArrayList<String[]>();
-				for (int i = numOfRowsStart; i < numOfRowsEnd; i++) {
-					dataCurr.add(new String[] { (String) data[i][0], (String) data[i][1], (String) data[i][2],
-							(String) data[i][3], (String) data[i][4], (String) data[i][5] });
-				}
-				String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
+				/*String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
 				table = new JTable(dataCurr1, headers);
 				table.repaint();
 				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
 				table.setRowHeight(50);
-				scroll.setViewportView(table);
+				scroll.setViewportView(table);*/
 			}
 		};
 		button.addActionListener(actionListener);
@@ -229,63 +197,20 @@ public class TableWithPages {
 	public void listenerTurnRight(JButton button, List<String[]> rowList) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("New File Button begin");
+				String username = "User";
+				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				
+				connected = true;
+				client.sendMessage(new ChatMessage(ChatMessage.TURN_RIGHT, numOfRows));
+				
 				System.out.println("Pressed");
 			
-				data = rowList.toArray(new String[0][]);
 
-				if (rowList.size() <= numOfRows) {
-					numOfRowsEnd = rowList.size();
-					numOfRowsStart = 0;
-					lableNumberOnPage.setText(" Number of page: " + 1 + " from " + (rowList.size() / numOfRows + 1));
-					lableNumberOfElements
-							.setText("Number of elementson page: " + rowList.size() + " from total " + rowList.size());
-				} else {
-					if (numOfRowsEnd == numOfRows) {
-						numOfRowsEnd = rowList.size();
-						numOfRowsStart = numOfRowsEnd - rowList.size() % numOfRows;
-						currPage = (rowList.size() / numOfRows + 1);
-						lableNumberOnPage
-								.setText(" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-						lableNumberOfElements.setText("Number of elementson page: " + rowList.size() % numOfRows
-								+ " from total " + rowList.size());
-					} else {
-						if (numOfRowsEnd != rowList.size()) {
-							if (numOfRowsEnd >= 2 * numOfRows) {
-								numOfRowsEnd -= numOfRows;
-								numOfRowsStart -= numOfRows;
-							} else {
-								numOfRowsStart = 0;
-								numOfRowsEnd = numOfRows;
-							}
-							currPage -= 1;
-							lableNumberOnPage.setText(
-									" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-							lableNumberOfElements.setText(
-									"Number of elementson page: " + numOfRows + " from total " + rowList.size());
-						} else {
-							numOfRowsEnd = rowList.size() - rowList.size() % numOfRows;
-							numOfRowsStart = numOfRowsEnd - numOfRows;
-							currPage -= 1;
-							lableNumberOnPage.setText(
-									" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-							lableNumberOfElements.setText(
-									"Number of elementson page: " + numOfRows + " from total " + rowList.size());
-						}
-					}
-				}
-				// data = rowList.toArray(new String[0][]);
-				List<String[]> dataCurr = new ArrayList<String[]>();
-				for (int i = numOfRowsStart; i < numOfRowsEnd; i++) {
-					dataCurr.add(new String[] { (String) data[i][0], (String) data[i][1], (String) data[i][2],
-							(String) data[i][3], (String) data[i][4], (String) data[i][5] });
-				}
-				String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
-				table = new JTable(dataCurr1, headers);
-				table.repaint();
-				currPage++;
-				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
-				table.setRowHeight(50);
-				scroll.setViewportView(table);
+				
 			}
 		};
 		button.addActionListener(actionListener);
@@ -294,36 +219,20 @@ public class TableWithPages {
 	public void listenerToHead(JButton button, List<String[]> rowList) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				System.out.println("New File Button begin");
+				String username = "User";
+				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				
+				connected = true;
+				client.sendMessage(new ChatMessage(ChatMessage.GO_TO_HEAD, numOfRows));
+				
 				System.out.println("Pressed");
+				
 
-				data = rowList.toArray(new String[0][]);
-				if (rowList.size() > numOfRows) {
-					currPage = 1;
-					lableNumberOnPage
-							.setText(" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-					lableNumberOfElements
-							.setText("Number of elementson page: " + numOfRows + " from total " + rowList.size());
-				} else {
-					currPage = 1;
-					lableNumberOnPage
-							.setText(" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-					lableNumberOfElements
-							.setText("Number of elementson page: " + rowList.size() + " from total " + rowList.size());
-				}
-				numOfRowsEnd = numOfRows;
-				numOfRowsStart = 0;
-				data = rowList.toArray(new String[0][]);
-				List<String[]> dataCurr = new ArrayList<String[]>();
-				for (int i = numOfRowsStart; i < numOfRowsEnd; i++) {
-					dataCurr.add(new String[] { (String) data[i][0], (String) data[i][1], (String) data[i][2],
-							(String) data[i][3], (String) data[i][4], (String) data[i][5] });
-				}
-				String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
-				table = new JTable(dataCurr1, headers);
-				table.repaint();
-				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
-				table.setRowHeight(50);
-				scroll.setViewportView(table);
+				
 			}
 		};
 		button.addActionListener(actionListener);
@@ -332,40 +241,18 @@ public class TableWithPages {
 	public void listenerToTail(JButton button, List<String[]> rowList) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Pressed to head");
+				System.out.println("New File Button begin");
+				String username = "User";
+				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				// test if we can start the Client
+				if (!client.start())
+					return;
+				
+				connected = true;
+				client.sendMessage(new ChatMessage(ChatMessage.GO_TO_TAIL, numOfRows));
+				
+				System.out.println("Pressed");
 
-				data = rowList.toArray(new String[0][]);
-
-				if (rowList.size() % numOfRows != 0) {
-					numOfRowsEnd = rowList.size();
-					numOfRowsStart = rowList.size() - rowList.size() % numOfRows;
-					currPage = (rowList.size() / numOfRows + 1);
-					lableNumberOnPage
-							.setText(" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-					lableNumberOfElements.setText("Number of elementson page: " + rowList.size() % numOfRows
-							+ " from total " + rowList.size());
-				} else {
-					numOfRowsEnd = rowList.size();
-					numOfRowsStart = rowList.size() - numOfRows;
-					currPage = (rowList.size() / numOfRows + 1);
-					lableNumberOnPage
-							.setText(" Number of page: " + currPage + " from " + (rowList.size() / numOfRows + 1));
-					lableNumberOfElements
-							.setText("Number of elementson page: " + numOfRows + " from total " + rowList.size());
-
-				}
-				data = rowList.toArray(new String[0][]);
-				List<String[]> dataCurr = new ArrayList<String[]>();
-				for (int i = numOfRowsStart; i < numOfRowsEnd; i++) {
-					dataCurr.add(new String[] { (String) data[i][0], (String) data[i][1], (String) data[i][2],
-							(String) data[i][3], (String) data[i][4], (String) data[i][5] });
-				}
-				String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
-				table = new JTable(dataCurr1, headers);
-				table.repaint();
-				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
-				table.setRowHeight(50);
-				scroll.setViewportView(table);
 			}
 		};
 		button.addActionListener(actionListener);
