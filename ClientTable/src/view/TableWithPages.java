@@ -43,8 +43,8 @@ public class TableWithPages {
 	JButton lastButton;
 	JButton changeRowsButton;
 
-	JLabel lableNumberOfElements;
-	JLabel lableNumberOnPage;
+	public JLabel lableNumberOfElements;
+	public JLabel lableNumberOnPage;
 	int currPage = 1;
 
 	JLabel numberOfEl;
@@ -174,7 +174,7 @@ public class TableWithPages {
 				
 				System.out.println("New File Button begin");
 				String username = "User";
-				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				client = new Client(t.serverAdress, t.defaultPort, username, t);
 				// test if we can start the Client
 				if (!client.start())
 					return;
@@ -199,7 +199,7 @@ public class TableWithPages {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("New File Button begin");
 				String username = "User";
-				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				client = new Client(t.serverAdress, t.defaultPort, username, t);
 				// test if we can start the Client
 				if (!client.start())
 					return;
@@ -221,7 +221,7 @@ public class TableWithPages {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("New File Button begin");
 				String username = "User";
-				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				client = new Client(t.serverAdress, t.defaultPort, username, t);
 				// test if we can start the Client
 				if (!client.start())
 					return;
@@ -243,7 +243,7 @@ public class TableWithPages {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("New File Button begin");
 				String username = "User";
-				client = new Client(t.defaultHost, t.defaultPort, username, t);
+				client = new Client(t.serverAdress, t.defaultPort, username, t);
 				// test if we can start the Client
 				if (!client.start())
 					return;

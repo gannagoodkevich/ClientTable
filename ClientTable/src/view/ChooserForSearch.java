@@ -23,8 +23,6 @@ import javax.swing.UIManager;
 
 import controller.ChatMessage;
 import controller.Client;
-import controller.DeleteController;
-import controller.SearchController;
 import controller.UniversityController;
 
 public class ChooserForSearch {
@@ -119,21 +117,14 @@ public class ChooserForSearch {
 		
 		System.out.println("Fac search Button begin");
 		String username = "User";
-		client = new Client("localhost", 1500, username, t);
-		// test if we can start the Client
-		if (!client.start())
-			return;
 		
-		connected = true;
-		client.sendMessage(new ChatMessage(ChatMessage.SEARCH_FAC, " hoping"));
-		
-		UniversityController uniController = new UniversityController();
+		UniversityController uniController = new UniversityController(t.uni);
 		String[] faculties = uniController.getFaculties().toArray(new String[0]);
 		String[] degreeT = uniController.getDegrees().toArray(new String[0]);
 		JComboBox<String> comboBoxF = new JComboBox<String>(faculties);
 		JComboBox<String> comboBoxDn = new JComboBox<String>(degreeT);
 
-		/*JPanel myPanel = new JPanel();
+		JPanel myPanel = new JPanel();
 		myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
 
 		myPanel.add(new JLabel("‘акультет:"));
@@ -145,11 +136,19 @@ public class ChooserForSearch {
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "¬ведите данные дл€ поиска и удалени€",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			SearchController searchcontr = new SearchController();
-			List<String[]> rowList = searchcontr.listenerSearchByFaculty((String) comboBoxF.getSelectedItem(),
-					(String) comboBoxDn.getSelectedItem());
+			client = new Client(t.serverAdress, 1500, username, t);
+			// test if we can start the Client
+			if (!client.start())
+				return;
+			
+			connected = true;
+			client.sendMessage(new ChatMessage(ChatMessage.SEARCH_FAC, (String) comboBoxF.getSelectedItem(), (String) comboBoxDn.getSelectedItem()));
+			
+			//SearchController searchcontr = new SearchController();
+			//List<String[]> rowList = searchcontr.listenerSearchByFaculty((String) comboBoxF.getSelectedItem(),
+					//(String) comboBoxDn.getSelectedItem());
 			// String[][] data = rowList.toArray(new String[0][]);
-			JPanel pan = new JPanel();
+			//JPanel pan = new JPanel();
 
 			/*
 			 * JTable table1 = new JTable(data, headers); scroll = new JScrollPane(table1);
@@ -157,14 +156,14 @@ public class ChooserForSearch {
 			 * table1.setRowHeight(50);
 			 */
 			// pan.setLayout(null);
-			/*TableWithPages currTable = new TableWithPages(t, rowList, pan);
+			//TableWithPages currTable = new TableWithPages(t, rowList, pan);
 			// pan.add(currTable.scroll);
 
-			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
+			//UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
 
-			JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
+			//JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
 
-		}*/
+		}
 
 	}
 
@@ -172,17 +171,11 @@ public class ChooserForSearch {
 
 		System.out.println("Name search Button begin");
 		String username = "User";
-		client = new Client("localhost", 1500, username, t);
-		// test if we can start the Client
-		if (!client.start())
-			return;
 		
-		connected = true;
-		client.sendMessage(new ChatMessage(ChatMessage.SEARCH_NAME, " hoping"));
 		
 		JTextField nameField = new JTextField();
 
-		UniversityController uniContr = new UniversityController();
+		UniversityController uniContr = new UniversityController(t.uni);
 		String[] departments = uniContr.getDepartments().toArray(new String[0]);
 
 		JComboBox<String> comboBoxD = new JComboBox<String>(departments);
@@ -198,22 +191,14 @@ public class ChooserForSearch {
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "¬ведите данные дл€ поиска",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			SearchController searchcontr = new SearchController();
-			List<String[]> rowList = searchcontr.listenerSearchByName( (String) comboBoxD.getSelectedItem(),
-					nameField.getText());
-
-			// String[][] data = rowList.toArray(new String[0][]);
-			JPanel pan = new JPanel();
-
-			/*
-			 * JTable table1 = new JTable(data, headers); scroll = new JScrollPane(table1);
-			 * table1.setPreferredScrollableViewportSize(new Dimension(1800, 500));
-			 * table1.setRowHeight(50); pan.add(scroll);
-			 */
-			TableWithPages currTable = new TableWithPages(t, rowList, pan);
-			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-			JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
-
+			
+			client = new Client(t.serverAdress, 1500, username, t);
+			// test if we can start the Client
+			if (!client.start())
+				return;
+			
+			connected = true;
+			client.sendMessage(new ChatMessage(ChatMessage.SEARCH_NAME, (String) comboBoxD.getSelectedItem(), nameField.getText()));
 		}
 	}
 
@@ -221,13 +206,7 @@ public class ChooserForSearch {
 
 		System.out.println("Name search Button begin");
 		String username = "User";
-		client = new Client("localhost", 1500, username, t);
-		// test if we can start the Client
-		if (!client.start())
-			return;
 		
-		connected = true;
-		client.sendMessage(new ChatMessage(ChatMessage.SEARCH_YEAR, " hoping"));
 	
 		
 		JTextField yearFieldFrom = new JTextField(10);
@@ -246,12 +225,14 @@ public class ChooserForSearch {
 		String uare1 = yearFieldFrom.getText();
 		String uare2 = yearFieldTo.getText();
 		if (result == JOptionPane.OK_OPTION) {
-			SearchController searchcontr = new SearchController();
-			List<String[]> rowList = searchcontr.listenerSearchByYear(uare1, uare2);
-			TableWithPages currTable = new TableWithPages(t, rowList, pan);
-			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-
-			JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
+			
+			client = new Client(t.serverAdress, 1500, username, t);
+			// test if we can start the Client
+			if (!client.start())
+				return;
+			
+			connected = true;
+			client.sendMessage(new ChatMessage(ChatMessage.SEARCH_YEAR, uare1, uare2));
 		}
 	}
 

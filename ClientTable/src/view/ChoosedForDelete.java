@@ -17,7 +17,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
-import controller.DeleteController;
+import controller.ChatMessage;
 import controller.Client;
 import controller.UniversityController;
 
@@ -28,6 +28,7 @@ public class ChoosedForDelete {
 	JTable table;
 	WindowUserCom currentWindow;
 	Client client;
+	boolean connected;
 
 	public ChoosedForDelete(WindowUserCom currentWindow) throws IOException {
 		this.currentWindow = currentWindow;
@@ -36,8 +37,6 @@ public class ChoosedForDelete {
 	public void listenerSearchChooser(JMenuItem menu, int index) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JPanel myPanel = new JPanel();
-				myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
 				if (index == 0) {
 					try {
 						listenerSearchByFaculty();
@@ -104,7 +103,8 @@ public class ChoosedForDelete {
 	}
 
 	public void listenerSearchByFaculty() throws IOException {
-		UniversityController uniController = new UniversityController();
+		
+		UniversityController uniController = new UniversityController(currentWindow.uni);
 		String[] faculties = uniController.getFaculties().toArray(new String[0]);
 		String[] degreeT = uniController.getDegrees().toArray(new String[0]);
 		JComboBox<String> comboBoxF = new JComboBox<String>(faculties);
@@ -118,13 +118,14 @@ public class ChoosedForDelete {
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "Выберите способ поиска",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			DeleteController deletecontr = new DeleteController(currentWindow);
-			int numberOfDelete = deletecontr.listenerSearchByFaculty((String) comboBoxF.getSelectedItem(),
-					(String) comboBoxDn.getSelectedItem());
-			JPanel pan = new JPanel();
-			pan.add(new JLabel(" " + numberOfDelete));
-			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-			JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
+			client = new Client(currentWindow.serverAdress, 1500, "HAHAHA", currentWindow);
+			// test if we can start the Client
+			if (!client.start())
+				return;
+			
+			connected = true;
+			client.sendMessage(new ChatMessage(ChatMessage.DELETE_FAC, (String) comboBoxF.getSelectedItem(), (String) comboBoxDn.getSelectedItem()));
+		
 		}
 
 	}
@@ -133,7 +134,7 @@ public class ChoosedForDelete {
 
 		JTextField nameField = new JTextField();
 
-		UniversityController uniContr = new UniversityController();
+		UniversityController uniContr = new UniversityController(currentWindow.uni);
 		String[] departments = uniContr.getDepartments().toArray(new String[0]);
 
 		JComboBox<String> comboBoxD = new JComboBox<String>(departments);
@@ -149,13 +150,15 @@ public class ChoosedForDelete {
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "Введите данные для поиска",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			DeleteController deletecontr = new DeleteController(currentWindow);
-			int numberOfDelete = deletecontr.listenerSearchByName((String) comboBoxD.getSelectedItem(),
-					nameField.getText());
-			JPanel pan = new JPanel();
-			pan.add(new JLabel(" " + numberOfDelete));
-			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-			JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
+			client = new Client(currentWindow.serverAdress, 1500, "HAHAHA", currentWindow);
+			// test if we can start the Client
+			if (!client.start())
+				return;
+			
+			connected = true;
+			client.sendMessage(new ChatMessage(ChatMessage.DELETE_NAME, (String) comboBoxD.getSelectedItem(), nameField.getText()));
+		
+				
 		}
 
 	}
@@ -172,16 +175,23 @@ public class ChoosedForDelete {
 		myPanel.add(yearFieldFrom);
 		myPanel.add(new JLabel("Стаж работы по:"));
 		myPanel.add(yearFieldTo);
-		int result = JOptionPane.showConfirmDialog(null, myPanel, "Введите данные для поиска",
-				JOptionPane.OK_CANCEL_OPTION);
-		String year1 = yearFieldFrom.getText();
-		String year2 = yearFieldTo.getText();
-		DeleteController deletecontr = new DeleteController(currentWindow);
-		int numberOfDelete = deletecontr.listenerSearchByYear(year1, year2);
 		JPanel pan = new JPanel();
-		pan.add(new JLabel(" " + numberOfDelete));
-		UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-		JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
+		int result = JOptionPane.showConfirmDialog(null, myPanel, "Введите данные для поиска и удаления",
+				JOptionPane.OK_CANCEL_OPTION);
+		String uare1 = yearFieldFrom.getText();
+		String uare2 = yearFieldTo.getText();
+
+		if (result == JOptionPane.OK_OPTION) {
+			client = new Client(currentWindow.serverAdress, 1500, "HAHAHA", currentWindow);
+			// test if we can start the Client
+			if (!client.start())
+				return;
+			
+			connected = true;
+			client.sendMessage(new ChatMessage(ChatMessage.DELETE_YEAR, uare1, uare2));
+		
+				
+		}
 
 	}
 

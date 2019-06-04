@@ -10,33 +10,45 @@ import java.util.Set;
 public class UniversityController {
 
 	public Client client;
+	public List<String[]> uni;
 	
-	public UniversityController() throws IOException{
+	public UniversityController(List<String[]> uni) throws IOException{
 		//this.client = new Client();
+		this.uni = uni;
 	}
 	
 	public List<String[]> getUniversity() {
-		List<String[]> rowList = new ArrayList<String[]>();
+		List<String[]> rowList = uni;
 		//server
-		return rowList;
+		return uni;
 	}
 	
 	
-	public List<String> getFaculties() {
+	public Set<String> getFaculties() {
 		//server requirenment
-		List<String> faculties = new ArrayList<String>();
+		Set<String> faculties = new HashSet<String>();
+		for(int i = 0; i< uni.size(); i++) {
+			faculties.add(uni.get(i)[0]);
+		}
 		return faculties;
 	}
 	
-	public List<String> getDepartments() {
-		List<String> departments = new ArrayList<String>();
+	public Set<String> getDepartments() {
+		Set<String> departments = new HashSet<String>();
 		//server
+		for(int i = 0; i< uni.size(); i++) {
+			departments.add(uni.get(i)[1]);
+		}
+		
 		return departments;
 	}	
 	
 	public Set<String> getDegrees(){
 		//server requirenment
 		Set<String> degreeT = new HashSet<>();
+		for(int i = 0; i< uni.size(); i++) {
+			degreeT.add(uni.get(i)[3]);
+		}
 		return degreeT;
 	}
 	

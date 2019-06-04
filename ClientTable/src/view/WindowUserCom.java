@@ -28,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.filechooser.FileSystemView;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -39,7 +40,6 @@ import org.xml.sax.SAXException;
 
 import controller.ChatMessage;
 import controller.Client;
-import controller.DeleteController;
 import controller.UniversityController;
 
 public class WindowUserCom {
@@ -51,7 +51,7 @@ public class WindowUserCom {
 	public List<JMenuItem> itemsSearch;
 	public List<JMenuItem> itemsDelete;
 	public int defaultPort;
-	String defaultHost;
+	String serverAdress;
 	private boolean connected;
 	private Client client;
 	List<JMenuItem> itemsFile;
@@ -64,10 +64,17 @@ public class WindowUserCom {
 
 	public WindowUserCom(String host, int port)
 			throws ParserConfigurationException, SAXException, IOException, TransformerException {
-		UniversityController uniContr = new UniversityController();
 		// this.uni = uniContr.getUniversity();
+		JPanel inputPanel = new JPanel();
+		inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+		inputPanel.add(new JLabel("Enter your number"));
+		JTextField serverField = new JTextField();
+		inputPanel.add(serverField);
+		JOptionPane.showConfirmDialog(null, inputPanel, "Введите информацию о новом преподавателе",
+				JOptionPane.OK_CANCEL_OPTION);
+		this.serverAdress = serverField.getText();
+		System.out.println(serverAdress);
 		this.defaultPort = port;
-		this.defaultHost = host;
 		mainPanel = new JPanel();
 		mainFrame = new JFrame();
 		mainFrame.add(mainPanel, BorderLayout.NORTH);
@@ -173,7 +180,7 @@ public class WindowUserCom {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("New File Button begin");
 				String username = "User";
-				client = new Client(defaultHost, defaultPort, username, cg);
+				client = new Client(serverAdress, defaultPort, username, cg);
 				// test if we can start the Client
 				if (!client.start())
 					return;
@@ -193,7 +200,7 @@ public class WindowUserCom {
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
 						"Р’РІРµРґРёС‚Рµ РґР°РЅРЅС‹Рµ РґР»СЏ РїРѕРёСЃРєР° Рё СѓРґР°Р»РµРЅРёСЏ",
 						JOptionPane.OK_CANCEL_OPTION);
-				String name = nameOfFile.getText();
+				String name = nameOfFile.getText() + ".xml";
 				// server part for creating file
 
 				JTextField nameField = new JTextField(20);
@@ -278,10 +285,11 @@ public class WindowUserCom {
 
 	}
 
-	public void drawTable(JPanel currPane,List<String[]> uni) {
+	public void drawTable(JPanel currPane, List<String[]> uni) {
 		if (currentTableWithLecturers != null) {
 			currentTableWithLecturers.delete();
 		}
+		this.uni = uni;
 		currentTableWithLecturers = new TableWithPages(this, uni, currPane);
 	}
 
@@ -294,7 +302,7 @@ public class WindowUserCom {
 				String username = "User";
 
 				// try creating a new Client with GUI
-				client = new Client(defaultHost, defaultPort, username, cg);
+				client = new Client(serverAdress, defaultPort, username, cg);
 				// test if we can start the Client
 				if (!client.start())
 					return;
@@ -302,11 +310,21 @@ public class WindowUserCom {
 				 * tf.setText(""); label.setText("Enter your message below");
 				 */
 
-				JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
-				fileChooser.showSaveDialog(null);
-				FileName = fileChooser.getSelectedFile().getAbsolutePath();
+				//JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+				//fileChooser.showSaveDialog(null);
+				//FileName = fileChooser.getSelectedFile().getAbsolutePath();
 				// Open the save dialog
-
+				JPanel pan1 = new JPanel();
+				// pan.setLayout(null);
+				JLabel ans = new JLabel("Choose your file");
+				String[] files= {
+						"BSUIR", "BSU"
+				};
+				JComboBox<String> file = new JComboBox<String>(files);
+				pan1.add(file);
+				UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
+				JOptionPane.showMessageDialog(null, pan1, "Hohoho", JOptionPane.OK_CANCEL_OPTION);
+				FileName = (String) file.getSelectedItem();
 				connected = true;
 				System.out.println("Open Fiel");
 				client.sendMessage(new ChatMessage(ChatMessage.FILE_OPEN, FileName));
@@ -333,7 +351,7 @@ public class WindowUserCom {
 				String username = "User";
 
 				// try creating a new Client with GUI
-				client = new Client(defaultHost, defaultPort, username, cg);
+				client = new Client(serverAdress, defaultPort, username, cg);
 				// test if we can start the Client
 				if (!client.start())
 					return;
@@ -351,7 +369,7 @@ public class WindowUserCom {
 				JTextField yearField = new JTextField(10);
 				UniversityController uniContr = null;
 				try {
-					uniContr = new UniversityController();
+					uniContr = new UniversityController(cg.uni);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -445,7 +463,7 @@ public class WindowUserCom {
 				JTextField yearField = new JTextField(10);
 				UniversityController uniContr = null;
 				try {
-					uniContr = new UniversityController();
+					uniContr = new UniversityController(uni);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
