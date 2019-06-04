@@ -144,6 +144,21 @@ public class ChooserForSearch {
 			connected = true;
 			client.sendMessage(new ChatMessage(ChatMessage.SEARCH_FAC, (String) comboBoxF.getSelectedItem(), (String) comboBoxDn.getSelectedItem()));
 			
+			try {
+				client.thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println("CREATE SMTH");
+			JPanel pan1 = new JPanel();
+			pan1.setLayout(null);
+			TableWithPages currTable = new TableWithPages(t, client.rowList, pan1);
+			pan1.add(currTable.scroll);
+			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
+			JOptionPane.showMessageDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
+			
 			//SearchController searchcontr = new SearchController();
 			//List<String[]> rowList = searchcontr.listenerSearchByFaculty((String) comboBoxF.getSelectedItem(),
 					//(String) comboBoxDn.getSelectedItem());
@@ -199,6 +214,22 @@ public class ChooserForSearch {
 			
 			connected = true;
 			client.sendMessage(new ChatMessage(ChatMessage.SEARCH_NAME, (String) comboBoxD.getSelectedItem(), nameField.getText()));
+		
+			try {
+				client.thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println("CREATE SMTH");
+			JPanel pan1 = new JPanel();
+			pan1.setLayout(null);
+			TableWithPages currTable = new TableWithPages(t, client.rowList, pan1);
+			pan1.add(currTable.scroll);
+			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
+			JOptionPane.showMessageDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
+		
 		}
 	}
 
@@ -225,7 +256,7 @@ public class ChooserForSearch {
 		String uare1 = yearFieldFrom.getText();
 		String uare2 = yearFieldTo.getText();
 		if (result == JOptionPane.OK_OPTION) {
-			
+			//t.activePanel = pan;
 			client = new Client(t.serverAdress, 1500, username, t);
 			// test if we can start the Client
 			if (!client.start())
@@ -233,6 +264,22 @@ public class ChooserForSearch {
 			
 			connected = true;
 			client.sendMessage(new ChatMessage(ChatMessage.SEARCH_YEAR, uare1, uare2));
+			
+			try {
+				client.thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			System.out.println("CREATE SMTH");
+			JPanel pan1 = new JPanel();
+			pan1.setLayout(null);
+			TableWithPages currTable = new TableWithPages(t, client.rowList, pan1);
+			pan1.add(currTable.scroll);
+			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
+			JOptionPane.showMessageDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
+			
 		}
 	}
 

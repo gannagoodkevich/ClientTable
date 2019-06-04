@@ -26,10 +26,14 @@ public class Client {
 
 	// if I use a GUI or not
 	private WindowUserCom cg;
-
+	public List<String[]> rowList;
+	
 	// the server, the port and the username
 	private String serverAdress, username;
 	private int port;
+	public ListenFromServer thread;
+	
+	
 
 	/*
 	 * Constructor called by console mode server: the server address port: the port
@@ -81,7 +85,8 @@ public class Client {
 		}
 
 		// creates the Thread to listen from the server
-		new ListenFromServer().start();
+		thread = new ListenFromServer();
+		thread.start();
 		// Send our username to the server this is the only message that we
 		// will send as a String. All other messages will be ChatMessage objects
 		try {
@@ -161,7 +166,7 @@ public class Client {
 	 * a class that waits for the message from the server and append them to the
 	 * JTextArea if we have a GUI or simply System.out.println() it in console mode
 	 */
-	class ListenFromServer extends Thread {
+	public class ListenFromServer extends Thread {
 
 		public void run() {
 			while (true) {
@@ -179,14 +184,15 @@ public class Client {
 						if (msg.get(0)[0].equals("SEARCH")) {
 							JPanel pan = new JPanel();
 							pan.setLayout(null);
-							List<String[]> rowList = new ArrayList<String[]>();
+							rowList = new ArrayList<String[]>();
 							for (int i = 1; i < msg.size(); i++) {
 								rowList.add(msg.get(i));
 							}
-							TableWithPages currTable = new TableWithPages(cg, rowList, pan);
+							//System.out.println("FOUND SMTH");
+							/*TableWithPages currTable = new TableWithPages(cg, rowList, pan);
 							pan.add(currTable.scroll);
 							UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-							JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);
+							JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);*/
 						} else {
 							if (msg.get(0)[0].equals("DELETE")) {
 								JPanel pan1 = new JPanel();

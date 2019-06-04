@@ -56,6 +56,7 @@ public class WindowUserCom {
 	private Client client;
 	List<JMenuItem> itemsFile;
 	public JPanel mainPanel;
+	public JPanel activePanel;
 	
 	JButton addButton;
 	JButton searchButton;
@@ -148,7 +149,7 @@ public class WindowUserCom {
 		createNewFile(itemsFile.get(0), this);
 		listenerAdd(itemsAdd.get(0));
 		openFile(itemsFile.get(1), this);
-
+		activePanel = mainPanel;
 		ChooserForSearch chooser = new ChooserForSearch(this);
 		chooser.listenerSearchChooser(searchButton);
 		chooser.listenerSearchChooser(itemsSearch.get(0), 0);
