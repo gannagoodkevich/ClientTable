@@ -240,13 +240,13 @@ public class WindowUserCom {
 						JOptionPane.OK_CANCEL_OPTION);
 				if (result1 == JOptionPane.OK_OPTION) {
 					List<String> lecturer = new ArrayList<String>();
-					lecturer.add(nameField.getText());
-					lecturer.add(surnameField.getText());
-					lecturer.add(secondNameField.getText());
 					lecturer.add(faculty.getText());
 					lecturer.add(department.getText());
+					lecturer.add(nameField.getText() + " " + surnameField.getText() + " " + secondNameField.getText());
 					lecturer.add((String) comboBoxDn.getSelectedItem());
 					lecturer.add((String) comboBoxD.getSelectedItem());
+					
+					
 					lecturer.add(yearField.getText());
 					client.sendMessage(new ChatMessage(ChatMessage.FILE_NEW, name, lecturer));
 
@@ -270,10 +270,7 @@ public class WindowUserCom {
 					 */
 					
 					listenerAdd(addButton, cg);
-					if(currentTableWithLecturers!=null) {
-						currentTableWithLecturers.delete();
-					}
-					currentTableWithLecturers = new TableWithPages(cg, uni, mainPanel);
+					drawTable(mainPanel, uni);
 					// currentTableWithLecturers.updateTable(uni);
 					
 					mainFrame.setVisible(true);
@@ -285,7 +282,7 @@ public class WindowUserCom {
 		menu.addActionListener(actionListener);
 
 	}
-
+	
 	public void drawTable(JPanel currPane, List<String[]> uni) {
 		if (currentTableWithLecturers != null) {
 			currentTableWithLecturers.delete();
@@ -387,36 +384,35 @@ public class WindowUserCom {
 
 				JPanel myPanel = new JPanel();
 				myPanel.setLayout(new BoxLayout(myPanel, BoxLayout.Y_AXIS));
-				myPanel.add(new JLabel("Р¤Р°РјРёР»РёСЏ:"));
+				myPanel.add(new JLabel("Фамилия:"));
 				myPanel.add(nameField);
-				myPanel.add(new JLabel("Р�РјСЏ"));
+				myPanel.add(new JLabel("Имя"));
 				myPanel.add(surnameField);
-				myPanel.add(new JLabel("РћС‚С‡РµСЃС‚РІРѕ:"));
+				myPanel.add(new JLabel("Отчество:"));
 				myPanel.add(secondNameField);
-				myPanel.add(new JLabel("Р¤Р°РєСѓР»СЊС‚РµС‚:"));
+				myPanel.add(new JLabel("Факультет:"));
 				myPanel.add(comboBoxFacultes);
-				myPanel.add(new JLabel("РљР°С„РµРґСЂР°:"));
+				myPanel.add(new JLabel("Кафедра:"));
 				myPanel.add(comboBoxDepartments);
-				myPanel.add(new JLabel("РЈС‡РµРЅРѕРµ Р·РІР°РЅРёРµ:"));
+				myPanel.add(new JLabel("Ученое звание:"));
 				myPanel.add(comboBoxDegreeScience);
-				myPanel.add(new JLabel("РЈС‡РµРЅР°СЏ СЃС‚РµРїРµРЅСЊ:"));
+				myPanel.add(new JLabel("Ученая степень:"));
 				myPanel.add(comboBoxdegreeTitle);
-				myPanel.add(new JLabel("РЎС‚Р°Р¶ СЂР°Р±РѕС‚С‹:"));
+				myPanel.add(new JLabel("Стаж работы:"));
 				myPanel.add(yearField);
 
 				int result = JOptionPane.showConfirmDialog(null, myPanel,
-						"Р’РІРµРґРёС‚Рµ РёРЅС„РѕСЂРјР°С†РёСЋ Рѕ РЅРѕРІРѕРј РїСЂРµРїРѕРґР°РІР°С‚РµР»Рµ",
+						"Введите данные о новом работнике",
 						JOptionPane.OK_CANCEL_OPTION);
 				if (result == JOptionPane.OK_OPTION) {
 					System.out.println("Write new lecturer");
 					List<String> lecturer = new ArrayList<String>();
-					lecturer.add(nameField.getText());
-					lecturer.add(surnameField.getText());
-					lecturer.add(secondNameField.getText());
 					lecturer.add((String) comboBoxFacultes.getSelectedItem());
 					lecturer.add((String) comboBoxDepartments.getSelectedItem());
-					lecturer.add((String) comboBoxDegreeScience.getSelectedItem());
+					lecturer.add(nameField.getText() + " " + surnameField.getText() + " " + secondNameField.getText());
 					lecturer.add((String) comboBoxdegreeTitle.getSelectedItem());
+					lecturer.add((String) comboBoxDegreeScience.getSelectedItem());
+					
 					lecturer.add(yearField.getText());
 					//uni = new ArrayList<String[]>();
 					uni.add(lecturer.toArray(new String[0]));

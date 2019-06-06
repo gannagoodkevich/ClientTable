@@ -50,7 +50,7 @@ public class TableWithPages {
 	JLabel numberOfEl;
 	JLabel currNumofEl;
 
-	public int numOfRows = 10;
+	public static int numOfRows = 10;
 	int numOfRowsEnd = numOfRows;
 	int numOfRowsStart = 0;
 
@@ -64,13 +64,14 @@ public class TableWithPages {
 		this.rowList = rowList;
 		this.t = t;
 		this.currenrPanel = currenrPanel;
+		//this.numOfRows = numOfRows;
 		pane = new JPanel();
 		if(rowList == null) {
 			table = new JTable();
 		}
 		else {
 			data = rowList.toArray(new String[0][]);
-			System.out.println("OOPSTable" + rowList.get(0)[0]);
+			//System.out.println("OOPSTable" + rowList.get(0)[0]);
 			// System.out.println(data[1][1]);
 			Vector<String[]> dataCurr = new Vector<String[]>();
 			if (rowList.size() < numOfRows) {
@@ -181,6 +182,7 @@ public class TableWithPages {
 				
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.TURN_LEFT, numOfRows));
+				System.out.println(numOfRows);
 				try {
 					client.thread.sleep(100);
 				} catch (InterruptedException e1) {
@@ -221,7 +223,7 @@ public class TableWithPages {
 				
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.TURN_RIGHT, numOfRows));
-				
+				System.out.println(numOfRows);
 				try {
 					client.thread.sleep(100);
 				} catch (InterruptedException e1) {
@@ -230,11 +232,14 @@ public class TableWithPages {
 				}
 				
 				System.out.println("CREATE SMTH");
-				t.drawTable(currenrPanel, client.rowList);
-				//TableWithPages currTable = new TableWithPages(t, client.rowList, currenrPanel);
-				t.mainFrame.invalidate();
-				t.mainFrame.validate();
-				t.mainFrame.repaint();
+				String[][] dataCurr1 = client.rowList.toArray(new String[0][]);
+				table = new JTable(dataCurr1, headers);
+				currenrPanel.invalidate();
+				currenrPanel.validate();
+				currenrPanel.repaint();
+				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
+				table.setRowHeight(50);
+				scroll.setViewportView(table);
 				System.out.println("Pressed");
 				
 			}
@@ -254,7 +259,7 @@ public class TableWithPages {
 				
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.GO_TO_HEAD, numOfRows));
-				
+				System.out.println(numOfRows);
 				try {
 					client.thread.sleep(100);
 				} catch (InterruptedException e1) {
@@ -263,11 +268,14 @@ public class TableWithPages {
 				}
 				
 				System.out.println("CREATE SMTH");
-				t.drawTable(currenrPanel, client.rowList);
-				//TableWithPages currTable = new TableWithPages(t, client.rowList, currenrPanel);
-				t.mainFrame.invalidate();
-				t.mainFrame.validate();
-				t.mainFrame.repaint();
+				String[][] dataCurr1 = client.rowList.toArray(new String[0][]);
+				table = new JTable(dataCurr1, headers);
+				currenrPanel.invalidate();
+				currenrPanel.validate();
+				currenrPanel.repaint();
+				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
+				table.setRowHeight(50);
+				scroll.setViewportView(table);
 				System.out.println("Pressed");
 				
 
@@ -289,7 +297,7 @@ public class TableWithPages {
 				
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.GO_TO_TAIL, numOfRows));
-				
+				System.out.println(numOfRows);
 				try {
 					client.thread.sleep(100);
 				} catch (InterruptedException e1) {
@@ -298,11 +306,15 @@ public class TableWithPages {
 				}
 				
 				System.out.println("CREATE SMTH");
-				t.drawTable(currenrPanel, client.rowList);
-				//TableWithPages currTable = new TableWithPages(t, client.rowList, currenrPanel);
-				t.mainFrame.invalidate();
-				t.mainFrame.validate();
-				t.mainFrame.repaint();
+				
+				String[][] dataCurr1 = client.rowList.toArray(new String[0][]);
+				table = new JTable(dataCurr1, headers);
+				currenrPanel.invalidate();
+				currenrPanel.validate();
+				currenrPanel.repaint();
+				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
+				table.setRowHeight(50);
+				scroll.setViewportView(table);
 				System.out.println("Pressed");
 
 			}
@@ -324,6 +336,7 @@ public class TableWithPages {
 					numOfRows = Integer.parseInt((String) comboBoxD.getSelectedItem());
 					numOfRowsEnd = numOfRows;
 					numOfRowsStart = 0;
+					System.out.println(numOfRows);
 				}
 			}
 		};

@@ -55,6 +55,9 @@ public class UniversityController {
 	public Set<String> getDegreesSc(){
 		Set<String> degreeScience = new HashSet<>();
 		//server
+		for(int i = 0; i< uni.size(); i++) {
+			degreeScience.add(uni.get(i)[4]);
+		}
 		return degreeScience;
 	}
 	

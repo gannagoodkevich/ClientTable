@@ -159,9 +159,8 @@ public class ChooserForSearch {
 			pan1.add(currTable.scroll);
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
 			int result1 = JOptionPane.showConfirmDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
-			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION) {
+			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION||result1 == JOptionPane.CLOSED_OPTION) {
 				client.sendMessage(new ChatMessage(ChatMessage.CLOSE_SEARCH, "Closing"));
-				
 				try {
 					client.thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -237,7 +236,7 @@ public class ChooserForSearch {
 			pan1.add(currTable.scroll);
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
 			int result1 = JOptionPane.showConfirmDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
-			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION) {
+			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION||result1 == JOptionPane.CLOSED_OPTION) {
 				client.sendMessage(new ChatMessage(ChatMessage.CLOSE_SEARCH, "Closing"));
 				
 				try {
@@ -297,7 +296,7 @@ public class ChooserForSearch {
 			pan1.add(currTable.scroll);
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
 			int result1 = JOptionPane.showConfirmDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
-			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION) {
+			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION||result1 == JOptionPane.CLOSED_OPTION) {
 				client.sendMessage(new ChatMessage(ChatMessage.CLOSE_SEARCH, "Closing"));
 				
 				try {

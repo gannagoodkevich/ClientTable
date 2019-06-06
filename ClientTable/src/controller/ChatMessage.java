@@ -77,6 +77,10 @@ public class ChatMessage implements Serializable {
 	int getType() {
 		return type;
 	}
+	
+	int getNumOfRows() {
+		return numOfRows;
+	}
 
 	String getFirstMessage() {
 		return message1;
