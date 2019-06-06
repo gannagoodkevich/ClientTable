@@ -34,6 +34,7 @@ public class ChatMessage implements Serializable {
 	public static final int TURN_RIGHT = 10;
 	public static final int GO_TO_HEAD = 11;
 	public static final int GO_TO_TAIL = 12;
+	public static final int CLOSE_SEARCH = 13;
 	private int type;
 	private String message1;
 	private String message2;

@@ -136,7 +136,7 @@ public class TableWithPages {
 		
 		// System.out.println(data[1][1]+ "problem");
 
-		listenerTurnLeft(rightButton, rowList);
+		listenerTurnLeft(rightButton);
 		listenerTurnRight(leftButton, rowList);
 		listenerToHead(firstButton, rowList);
 		listenerToTail(lastButton, rowList);
@@ -168,7 +168,7 @@ public class TableWithPages {
 		lableNumberOnPage.setVisible(false);
 	}
 
-	public void listenerTurnLeft(JButton button, List<String[]> rowList) {
+	public void listenerTurnLeft(JButton button) {
 		ActionListener actionListener = new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -181,9 +181,24 @@ public class TableWithPages {
 				
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.TURN_LEFT, numOfRows));
+				try {
+					client.thread.sleep(100);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				
+				System.out.println("CREATE SMTH");
+				String[][] dataCurr1 = client.rowList.toArray(new String[0][]);
+				table = new JTable(dataCurr1, headers);
+				currenrPanel.invalidate();
+				currenrPanel.validate();
+				currenrPanel.repaint();
+				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
+				table.setRowHeight(50);
+				scroll.setViewportView(table);
 				System.out.println("Pressed");
-				/*String[][] dataCurr1 = dataCurr.toArray(new String[0][]);
+				/*
 				table = new JTable(dataCurr1, headers);
 				table.repaint();
 				table.setPreferredScrollableViewportSize(new Dimension(400, 500));
@@ -207,9 +222,20 @@ public class TableWithPages {
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.TURN_RIGHT, numOfRows));
 				
+				try {
+					client.thread.sleep(100);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				System.out.println("CREATE SMTH");
+				t.drawTable(currenrPanel, client.rowList);
+				//TableWithPages currTable = new TableWithPages(t, client.rowList, currenrPanel);
+				t.mainFrame.invalidate();
+				t.mainFrame.validate();
+				t.mainFrame.repaint();
 				System.out.println("Pressed");
-			
-
 				
 			}
 		};
@@ -229,6 +255,19 @@ public class TableWithPages {
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.GO_TO_HEAD, numOfRows));
 				
+				try {
+					client.thread.sleep(100);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				System.out.println("CREATE SMTH");
+				t.drawTable(currenrPanel, client.rowList);
+				//TableWithPages currTable = new TableWithPages(t, client.rowList, currenrPanel);
+				t.mainFrame.invalidate();
+				t.mainFrame.validate();
+				t.mainFrame.repaint();
 				System.out.println("Pressed");
 				
 
@@ -251,6 +290,19 @@ public class TableWithPages {
 				connected = true;
 				client.sendMessage(new ChatMessage(ChatMessage.GO_TO_TAIL, numOfRows));
 				
+				try {
+					client.thread.sleep(100);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				System.out.println("CREATE SMTH");
+				t.drawTable(currenrPanel, client.rowList);
+				//TableWithPages currTable = new TableWithPages(t, client.rowList, currenrPanel);
+				t.mainFrame.invalidate();
+				t.mainFrame.validate();
+				t.mainFrame.repaint();
 				System.out.println("Pressed");
 
 			}

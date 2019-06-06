@@ -116,7 +116,7 @@ public class ChooserForSearch {
 	public void listenerSearchByFaculty() throws IOException {
 		
 		System.out.println("Fac search Button begin");
-		String username = "User";
+		
 		
 		UniversityController uniController = new UniversityController(t.uni);
 		String[] faculties = uniController.getFaculties().toArray(new String[0]);
@@ -136,7 +136,8 @@ public class ChooserForSearch {
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "¬ведите данные дл€ поиска и удалени€",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			client = new Client(t.serverAdress, 1500, username, t);
+			String username = "Search by faculty";
+			client = new Client(t.serverAdress, t.defaultPort, username, t);
 			// test if we can start the Client
 			if (!client.start())
 				return;
@@ -157,8 +158,17 @@ public class ChooserForSearch {
 			TableWithPages currTable = new TableWithPages(t, client.rowList, pan1);
 			pan1.add(currTable.scroll);
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-			JOptionPane.showMessageDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
-			
+			int result1 = JOptionPane.showConfirmDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
+			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION) {
+				client.sendMessage(new ChatMessage(ChatMessage.CLOSE_SEARCH, "Closing"));
+				
+				try {
+					client.thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 			//SearchController searchcontr = new SearchController();
 			//List<String[]> rowList = searchcontr.listenerSearchByFaculty((String) comboBoxF.getSelectedItem(),
 					//(String) comboBoxDn.getSelectedItem());
@@ -185,8 +195,6 @@ public class ChooserForSearch {
 	public void listenerSearchByName() throws IOException {
 
 		System.out.println("Name search Button begin");
-		String username = "User";
-		
 		
 		JTextField nameField = new JTextField();
 
@@ -206,8 +214,8 @@ public class ChooserForSearch {
 		int result = JOptionPane.showConfirmDialog(null, myPanel, "¬ведите данные дл€ поиска",
 				JOptionPane.OK_CANCEL_OPTION);
 		if (result == JOptionPane.OK_OPTION) {
-			
-			client = new Client(t.serverAdress, 1500, username, t);
+			String username = "Search by name";
+			client = new Client(t.serverAdress, t.defaultPort, username, t);
 			// test if we can start the Client
 			if (!client.start())
 				return;
@@ -228,7 +236,17 @@ public class ChooserForSearch {
 			TableWithPages currTable = new TableWithPages(t, client.rowList, pan1);
 			pan1.add(currTable.scroll);
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-			JOptionPane.showMessageDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
+			int result1 = JOptionPane.showConfirmDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
+			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION) {
+				client.sendMessage(new ChatMessage(ChatMessage.CLOSE_SEARCH, "Closing"));
+				
+				try {
+					client.thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		
 		}
 	}
@@ -236,7 +254,6 @@ public class ChooserForSearch {
 	public void listenerSearchByYear() throws IOException {
 
 		System.out.println("Name search Button begin");
-		String username = "User";
 		
 	
 		
@@ -257,7 +274,8 @@ public class ChooserForSearch {
 		String uare2 = yearFieldTo.getText();
 		if (result == JOptionPane.OK_OPTION) {
 			//t.activePanel = pan;
-			client = new Client(t.serverAdress, 1500, username, t);
+			String username = "Search by year";
+			client = new Client(t.serverAdress, t.defaultPort, username, t);
 			// test if we can start the Client
 			if (!client.start())
 				return;
@@ -278,8 +296,17 @@ public class ChooserForSearch {
 			TableWithPages currTable = new TableWithPages(t, client.rowList, pan1);
 			pan1.add(currTable.scroll);
 			UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-			JOptionPane.showMessageDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
-			
+			int result1 = JOptionPane.showConfirmDialog(null, pan1, "Table", JOptionPane.OK_CANCEL_OPTION);
+			if(result1 == JOptionPane.CANCEL_OPTION||result1 == JOptionPane.OK_OPTION) {
+				client.sendMessage(new ChatMessage(ChatMessage.CLOSE_SEARCH, "Closing"));
+				
+				try {
+					client.thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 

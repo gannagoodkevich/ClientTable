@@ -182,17 +182,12 @@ public class Client {
 						// Client.cg.setUni(msg);
 
 						if (msg.get(0)[0].equals("SEARCH")) {
-							JPanel pan = new JPanel();
-							pan.setLayout(null);
+							/*JPanel pan = new JPanel();
+							pan.setLayout(null);*/
 							rowList = new ArrayList<String[]>();
 							for (int i = 1; i < msg.size(); i++) {
 								rowList.add(msg.get(i));
 							}
-							//System.out.println("FOUND SMTH");
-							/*TableWithPages currTable = new TableWithPages(cg, rowList, pan);
-							pan.add(currTable.scroll);
-							UIManager.put("OptionPane.minimumSize", new Dimension(1800, 500));
-							JOptionPane.showMessageDialog(null, pan, "Table", JOptionPane.OK_CANCEL_OPTION);*/
 						} else {
 							if (msg.get(0)[0].equals("DELETE")) {
 								JPanel pan1 = new JPanel();
@@ -205,16 +200,20 @@ public class Client {
 								JOptionPane.showMessageDialog(null, pan1, "Hohoho", JOptionPane.OK_CANCEL_OPTION);
 							} else {
 								if (msg.get(0)[0].equals("TURN")) {
-									List<String[]> rowList = new ArrayList<String[]>();
+									rowList = new ArrayList<String[]>();
 									for (int i = 1; i < msg.size(); i++) {
 										rowList.add(msg.get(i));
 									}
-									cg.drawTable(cg.mainPanel, rowList);
+									System.out.println("LOAD SMTH");
+									cg.currentTableWithLecturers.lableNumberOfElements.setText(msg.get(0)[2]);
+									cg.currentTableWithLecturers.lableNumberOnPage.setText(msg.get(0)[1]);
+									
+									/*cg.drawTable(cg.mainPanel, rowList);
 									cg.currentTableWithLecturers.lableNumberOfElements.setText(msg.get(0)[2]);
 									cg.currentTableWithLecturers.lableNumberOnPage.setText(msg.get(0)[1]);
 									cg.mainFrame.invalidate();
 									cg.mainFrame.validate();
-									cg.mainFrame.repaint();
+									cg.mainFrame.repaint();*/
 								}
 								else{
 									cg.drawTable(cg.mainPanel, msg);
