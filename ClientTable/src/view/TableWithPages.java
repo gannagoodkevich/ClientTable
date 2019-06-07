@@ -200,6 +200,8 @@ public class TableWithPages {
 				table.setRowHeight(50);
 				scroll.setViewportView(table);
 				System.out.println("Pressed");
+				lableNumberOfElements.setText(client.lableNumberOfElements);
+				lableNumberOnPage.setText(client.lableNumberOnPage);
 				/*
 				table = new JTable(dataCurr1, headers);
 				table.repaint();
@@ -241,6 +243,8 @@ public class TableWithPages {
 				table.setRowHeight(50);
 				scroll.setViewportView(table);
 				System.out.println("Pressed");
+				lableNumberOfElements.setText(client.lableNumberOfElements);
+				lableNumberOnPage.setText(client.lableNumberOnPage);
 				
 			}
 		};
@@ -277,7 +281,8 @@ public class TableWithPages {
 				table.setRowHeight(50);
 				scroll.setViewportView(table);
 				System.out.println("Pressed");
-				
+				lableNumberOfElements.setText(client.lableNumberOfElements);
+				lableNumberOnPage.setText(client.lableNumberOnPage);
 
 				
 			}
@@ -316,6 +321,8 @@ public class TableWithPages {
 				table.setRowHeight(50);
 				scroll.setViewportView(table);
 				System.out.println("Pressed");
+				lableNumberOfElements.setText(client.lableNumberOfElements);
+				lableNumberOnPage.setText(client.lableNumberOnPage);
 
 			}
 		};

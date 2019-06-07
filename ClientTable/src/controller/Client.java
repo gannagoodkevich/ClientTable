@@ -8,10 +8,8 @@ import java.util.*;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-import view.TableWithPages;
 import view.WindowUserCom;
 
 /*
@@ -27,6 +25,8 @@ public class Client {
 	// if I use a GUI or not
 	private WindowUserCom cg;
 	public List<String[]> rowList;
+	public String lableNumberOfElements;
+	public String lableNumberOnPage;
 	
 	// the server, the port and the username
 	private String serverAdress, username;
@@ -205,8 +205,8 @@ public class Client {
 										rowList.add(msg.get(i));
 									}
 									System.out.println("LOAD SMTH");
-									cg.currentTableWithLecturers.lableNumberOfElements.setText(msg.get(0)[2]);
-									cg.currentTableWithLecturers.lableNumberOnPage.setText(msg.get(0)[1]);
+									lableNumberOfElements = msg.get(0)[2];
+									lableNumberOnPage = msg.get(0)[1];
 									
 									/*cg.drawTable(cg.mainPanel, rowList);
 									cg.currentTableWithLecturers.lableNumberOfElements.setText(msg.get(0)[2]);
